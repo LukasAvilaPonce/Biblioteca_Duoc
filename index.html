@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FF6B6B">
 <title>Biblioteca Duoc</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -10,419 +11,538 @@
   :root {
     --coral: #FF6B6B;
     --coral-dark: #E85D5D;
+    --coral-soft: rgba(255,107,107,.10);
+    --naranja: #FF8E53;
     --amarillo: #FFD93D;
-    --amarillo-soft: #FFF3CD;
+    --amarillo-soft: #FFF8E1;
     --verde: #6BCB77;
     --verde-dark: #5AB868;
+    --verde-soft: rgba(107,203,119,.12);
     --azul: #4D96FF;
     --azul-soft: #EBF3FF;
-    --bg: #FAFAFA;
+    --morado: #A66CFF;
+    --morado-soft: rgba(166,108,255,.10);
+    --bg: #F5F6FA;
     --blanco: #FFFFFF;
     --texto: #2D3436;
     --texto-soft: #636E72;
+    --texto-light: #B2BEC3;
     --borde: #E8E8E8;
-    --sombra: rgba(0, 0, 0, 0.06);
+    --sombra: rgba(0,0,0,.06);
+    --sidebar-bg: #1E272E;
+    --sidebar-hover: #2C3A47;
+    --sidebar-active: var(--coral);
     --radius: 14px;
+    --transition: .25s ease;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    color: var(--texto);
-    min-height: 100vh;
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--texto); min-height: 100vh; overflow-x: hidden; }
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; }
+
+  /* ══════════════════════════════════════
+     LOGIN
+     ══════════════════════════════════════ */
+  #loginScreen {
+    align-items: center; justify-content: center; padding: 20px;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFD93D 100%);
+    background-size: 300% 300%;
+    animation: bgMove 8s ease infinite;
+  }
+  @keyframes bgMove {
+    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
+  }
+  .login-card {
+    background: var(--blanco); border-radius: 22px; padding: 44px 38px; width: 400px; max-width: 100%;
+    box-shadow: 0 30px 80px rgba(0,0,0,.18);
+    animation: cardPop .6s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes cardPop { 0%{opacity:0;transform:translateY(30px) scale(.95)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+  .login-brand { text-align: center; margin-bottom: 30px; }
+  .login-brand .icon { font-size: 52px; margin-bottom: 10px; }
+  .login-brand h1 { font-size: 28px; font-weight: 800; color: var(--coral); }
+  .login-brand p { font-size: 14px; color: var(--texto-soft); margin-top: 4px; }
+  .field { margin-top: 18px; }
+  .field label { display: block; font-size: 13px; font-weight: 700; color: var(--texto-soft); margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; padding: 13px 16px; border: 2px solid var(--borde); border-radius: 12px;
+    font-size: 15px; font-family: inherit; background: var(--bg); transition: border-color .2s;
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--coral); }
+  .login-btn {
+    width: 100%; padding: 14px; margin-top: 26px;
+    background: linear-gradient(135deg, var(--coral), var(--naranja));
+    color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 800;
+    font-family: inherit; cursor: pointer; transition: transform .15s, box-shadow .2s;
+    box-shadow: 0 8px 24px rgba(255,107,107,.3);
+  }
+  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,107,107,.4); }
+  .login-btn:active { transform: scale(.98); }
+  .login-error {
+    display: none; margin-top: 14px; padding: 10px 14px; border-radius: 10px;
+    background: var(--coral-soft); color: var(--coral-dark); font-size: 13px; font-weight: 600;
+    text-align: center; animation: shake .4s;
+  }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  .login-hint {
+    margin-top: 20px; padding: 14px; border-radius: 10px; background: var(--azul-soft);
+    font-size: 12px; color: var(--azul); line-height: 1.6;
+  }
+  .login-hint b { display: block; margin-bottom: 4px; font-size: 13px; }
+
+  /* ══════════════════════════════════════
+     APP SHELL
+     ══════════════════════════════════════ */
+  #appScreen { flex-direction: column; }
+  .topbar {
+    background: var(--blanco); border-bottom: 1px solid var(--borde); padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between; height: 60px;
+    position: sticky; top: 0; z-index: 20; box-shadow: 0 1px 4px var(--sombra);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
+  .hamburger {
+    display: none; background: none; border: 1px solid var(--borde); border-radius: 8px;
+    padding: 6px 10px; cursor: pointer; font-size: 20px; color: var(--texto);
+  }
+  .topbar-title { font-size: 18px; font-weight: 800; color: var(--coral); }
+  .topbar-right { display: flex; align-items: center; gap: 14px; }
+  .topbar-user { font-size: 14px; color: var(--texto-soft); }
+  .topbar-role {
+    font-size: 11px; background: var(--coral-soft); color: var(--coral); padding: 4px 10px;
+    border-radius: 6px; font-weight: 700;
+  }
+  .btn-logout {
+    background: none; border: 1px solid var(--borde); padding: 7px 14px; border-radius: 8px;
+    cursor: pointer; font-size: 13px; font-family: inherit; color: var(--texto-soft); transition: .2s;
+  }
+  .btn-logout:hover { border-color: var(--coral); color: var(--coral); }
+
+  .app-body { display: flex; flex: 1; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px; background: var(--sidebar-bg); min-height: calc(100vh - 60px); padding: 20px 12px;
+    display: flex; flex-direction: column; gap: 4px; flex-shrink: 0;
+  }
+  .nav-sep {
+    font-size: 11px; text-transform: uppercase; color: rgba(255,255,255,.3); padding: 16px 14px 6px;
+    letter-spacing: .8px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px;
+    cursor: pointer; color: rgba(255,255,255,.6); font-size: 14px; font-weight: 600;
+    transition: all .2s;
+  }
+  .nav-item:hover { background: var(--sidebar-hover); color: #fff; transform: translateX(3px); }
+  .nav-item.active {
+    background: linear-gradient(135deg, var(--coral), var(--naranja)); color: #fff;
+    box-shadow: 0 4px 16px rgba(255,107,107,.3);
+  }
+  .nav-item .ic { width: 22px; text-align: center; font-size: 16px; }
+
+  .main-content { flex: 1; padding: 28px 32px; overflow-y: auto; max-height: calc(100vh - 60px); }
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn .35s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .page-title { font-size: 24px; font-weight: 800; color: var(--texto); margin-bottom: 4px; }
+  .page-sub { font-size: 14px; color: var(--texto-soft); margin-bottom: 24px; }
+
+  /* ══════════════════════════════════════
+     DASHBOARD
+     ══════════════════════════════════════ */
+  .dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .dash-card {
+    background: var(--blanco); border-radius: var(--radius); padding: 22px; position: relative;
+    box-shadow: 0 2px 12px var(--sombra); overflow: hidden; transition: transform .2s, box-shadow .2s;
+  }
+  .dash-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.08); }
+  .dash-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .dash-card.c-azul::before { background: var(--azul); }
+  .dash-card.c-verde::before { background: var(--verde); }
+  .dash-card.c-coral::before { background: var(--coral); }
+  .dash-card.c-morado::before { background: var(--morado); }
+  .dash-card .dc-icon { font-size: 28px; margin-bottom: 8px; }
+  .dash-card .dc-val { font-size: 32px; font-weight: 800; }
+  .dash-card.c-azul .dc-val { color: var(--azul); }
+  .dash-card.c-verde .dc-val { color: var(--verde); }
+  .dash-card.c-coral .dc-val { color: var(--coral); }
+  .dash-card.c-morado .dc-val { color: var(--morado); }
+  .dash-card .dc-lbl { font-size: 13px; color: var(--texto-soft); margin-top: 2px; }
+
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .panel {
+    background: var(--blanco); border-radius: var(--radius); padding: 24px;
+    box-shadow: 0 2px 12px var(--sombra);
+  }
+  .panel h3 { font-size: 16px; font-weight: 800; margin-bottom: 18px; color: var(--texto); }
+
+  /* Barras de género */
+  .genre-bar { margin-bottom: 14px; }
+  .genre-bar .gb-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+  .genre-bar .gb-label span:first-child { color: var(--texto); font-weight: 600; }
+  .genre-bar .gb-label span:last-child { color: var(--texto-soft); }
+  .genre-bar .gb-track { height: 10px; background: var(--bg); border-radius: 10px; overflow: hidden; }
+  .genre-bar .gb-fill {
+    height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(.22,1,.36,1);
   }
 
-  /* ── Header ── */
-  header {
-    background: linear-gradient(135deg, var(--coral), #FF8E53);
-    color: #fff;
-    padding: 32px 24px 28px;
-    text-align: center;
+  /* Actividad reciente */
+  .activity-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid var(--borde); font-size: 14px;
   }
-  header h1 {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: 1px;
+  .activity-item:last-child { border-bottom: none; }
+  .activity-item .ai-icon {
+    width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center;
+    justify-content: center; font-size: 16px; flex-shrink: 0;
   }
-  header p {
-    font-size: 14px;
-    opacity: .85;
-    margin-top: 4px;
-  }
+  .activity-item .ai-icon.prestamo { background: var(--coral-soft); }
+  .activity-item .ai-icon.devolucion { background: var(--verde-soft); }
+  .activity-item .ai-icon.nuevo { background: var(--azul-soft); }
+  .activity-item .ai-text { flex: 1; color: var(--texto-soft); line-height: 1.4; }
+  .activity-item .ai-text b { color: var(--texto); }
+  .activity-item .ai-date { font-size: 12px; color: var(--texto-light); white-space: nowrap; }
 
-  /* ── Contenedor principal ── */
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  /* ── Contadores ── */
-  .stats {
-    display: flex;
-    gap: 14px;
-    margin: -24px auto 24px;
-    position: relative;
-    z-index: 2;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .stat {
-    background: var(--blanco);
-    border-radius: var(--radius);
-    padding: 16px 24px;
-    text-align: center;
-    box-shadow: 0 4px 16px var(--sombra);
-    min-width: 140px;
-    flex: 1;
-    max-width: 200px;
-  }
-  .stat .num {
-    font-size: 28px;
-    font-weight: 800;
-  }
-  .stat .lbl {
-    font-size: 12px;
-    color: var(--texto-soft);
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    margin-top: 2px;
-  }
-  .stat.total .num { color: var(--azul); }
-  .stat.disp .num { color: var(--verde); }
-  .stat.prest .num { color: var(--coral); }
-
-  /* ── Barra de acciones (buscar, filtros, botón agregar) ── */
+  /* ══════════════════════════════════════
+     CATÁLOGO
+     ══════════════════════════════════════ */
   .toolbar {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-    align-items: center;
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; align-items: center;
   }
-  .search-box {
-    flex: 1;
-    min-width: 200px;
-    position: relative;
-  }
+  .search-box { flex: 1; min-width: 200px; position: relative; }
   .search-box input {
-    width: 100%;
-    padding: 12px 16px 12px 42px;
-    border: 2px solid var(--borde);
-    border-radius: 10px;
-    font-size: 15px;
-    font-family: inherit;
-    background: var(--blanco);
-    transition: border-color .2s;
+    width: 100%; padding: 12px 16px 12px 42px; border: 2px solid var(--borde); border-radius: 10px;
+    font-size: 15px; font-family: inherit; background: var(--blanco); transition: border-color .2s;
   }
-  .search-box input:focus {
-    outline: none;
-    border-color: var(--coral);
-  }
-  .search-box .icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px;
-    opacity: .5;
-  }
+  .search-box input:focus { outline: none; border-color: var(--coral); }
+  .search-box .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; opacity: .5; }
   .filter-select {
-    padding: 12px 14px;
-    border: 2px solid var(--borde);
-    border-radius: 10px;
-    font-size: 14px;
-    font-family: inherit;
-    background: var(--blanco);
-    cursor: pointer;
-    transition: border-color .2s;
+    padding: 12px 14px; border: 2px solid var(--borde); border-radius: 10px; font-size: 14px;
+    font-family: inherit; background: var(--blanco); cursor: pointer; transition: border-color .2s;
   }
-  .filter-select:focus {
-    outline: none;
-    border-color: var(--coral);
-  }
+  .filter-select:focus { outline: none; border-color: var(--coral); }
   .btn-add {
-    padding: 12px 22px;
-    background: linear-gradient(135deg, var(--coral), #FF8E53);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: inherit;
-    cursor: pointer;
-    transition: transform .15s, box-shadow .2s;
-    white-space: nowrap;
+    padding: 12px 22px; background: linear-gradient(135deg, var(--coral), var(--naranja));
+    color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+    font-family: inherit; cursor: pointer; transition: transform .15s, box-shadow .2s; white-space: nowrap;
   }
-  .btn-add:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 107, .35);
-  }
+  .btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,107,.35); }
 
-  /* ── Grilla de tarjetas ── */
   .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 18px;
-    margin-bottom: 40px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; margin-bottom: 40px;
   }
   .card {
-    background: var(--blanco);
-    border-radius: var(--radius);
-    padding: 20px;
-    box-shadow: 0 2px 12px var(--sombra);
-    border: 2px solid transparent;
+    background: var(--blanco); border-radius: var(--radius); padding: 20px;
+    box-shadow: 0 2px 12px var(--sombra); border: 2px solid transparent;
     transition: transform .2s, box-shadow .2s, border-color .2s;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: flex; flex-direction: column; gap: 10px;
   }
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, .08);
-    border-color: var(--amarillo);
-  }
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .card-title {
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.3;
-  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.08); border-color: var(--amarillo); }
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .card-title { font-size: 17px; font-weight: 700; line-height: 1.3; }
   .card-badge {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .3px;
-    white-space: nowrap;
-    flex-shrink: 0;
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; flex-shrink: 0;
   }
-  .card-badge.disponible {
-    background: rgba(107, 203, 119, .15);
-    color: var(--verde-dark);
-  }
-  .card-badge.prestado {
-    background: rgba(255, 107, 107, .12);
-    color: var(--coral);
-  }
-  .card-info {
-    font-size: 14px;
-    color: var(--texto-soft);
-    line-height: 1.6;
-  }
+  .card-badge.disponible { background: var(--verde-soft); color: var(--verde-dark); }
+  .card-badge.prestado { background: var(--coral-soft); color: var(--coral); }
+  .card-info { font-size: 14px; color: var(--texto-soft); line-height: 1.6; }
   .card-info span { display: block; }
   .card-prestamo {
-    font-size: 13px;
-    color: var(--coral);
-    background: rgba(255, 107, 107, .06);
-    padding: 8px 12px;
-    border-radius: 8px;
+    font-size: 13px; color: var(--coral); background: var(--coral-soft);
+    padding: 8px 12px; border-radius: 8px;
   }
-  .card-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: auto;
-    padding-top: 6px;
-    flex-wrap: wrap;
-  }
+  .card-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 6px; flex-wrap: wrap; }
   .card-actions button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: transform .1s, opacity .2s;
+    padding: 8px 14px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+    font-family: inherit; cursor: pointer; transition: transform .1s;
   }
   .card-actions button:hover { transform: scale(1.04); }
   .card-actions button:active { transform: scale(.97); }
-  .btn-prestar {
-    background: var(--azul-soft);
-    color: var(--azul);
-  }
-  .btn-devolver {
-    background: rgba(107, 203, 119, .15);
-    color: var(--verde-dark);
-  }
-  .btn-editar {
-    background: var(--amarillo-soft);
-    color: #B8860B;
-  }
-  .btn-eliminar {
-    background: rgba(255, 107, 107, .1);
-    color: var(--coral);
-  }
+  .btn-prestar { background: var(--azul-soft); color: var(--azul); }
+  .btn-devolver { background: var(--verde-soft); color: var(--verde-dark); }
+  .btn-editar { background: var(--amarillo-soft); color: #B8860B; }
+  .btn-eliminar { background: var(--coral-soft); color: var(--coral); }
 
-  .empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--texto-soft);
-    grid-column: 1 / -1;
-  }
+  .empty { text-align: center; padding: 60px 20px; color: var(--texto-soft); grid-column: 1 / -1; }
   .empty .emoji { font-size: 48px; margin-bottom: 12px; }
-  .empty p { font-size: 15px; }
 
-  /* ── Modal ── */
+  /* ══════════════════════════════════════
+     PRÉSTAMOS
+     ══════════════════════════════════════ */
+  .table-wrap { overflow-x: auto; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 600px; }
+  table.data th {
+    text-align: left; padding: 12px 16px; font-size: 12px; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--texto-soft); border-bottom: 2px solid var(--borde); background: var(--bg);
+  }
+  table.data td { padding: 14px 16px; border-bottom: 1px solid var(--borde); color: var(--texto); }
+  table.data tbody tr { transition: background .15s; }
+  table.data tbody tr:hover td { background: var(--azul-soft); }
+  .pill {
+    display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  }
+  .pill.activo { background: var(--coral-soft); color: var(--coral); }
+  .pill.devuelto { background: var(--verde-soft); color: var(--verde-dark); }
+  .btn-table {
+    padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700;
+    font-family: inherit; cursor: pointer; background: var(--verde-soft); color: var(--verde-dark);
+    transition: transform .1s;
+  }
+  .btn-table:hover { transform: scale(1.05); }
+
+  /* ══════════════════════════════════════
+     USUARIOS (admin)
+     ══════════════════════════════════════ */
+  .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .user-card {
+    background: var(--blanco); border-radius: var(--radius); padding: 20px;
+    box-shadow: 0 2px 12px var(--sombra); display: flex; align-items: center; gap: 16px;
+    transition: transform .2s;
+  }
+  .user-card:hover { transform: translateY(-3px); }
+  .user-avatar {
+    width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; font-size: 22px; flex-shrink: 0;
+  }
+  .user-avatar.admin { background: var(--coral-soft); }
+  .user-avatar.biblio { background: var(--azul-soft); }
+  .user-info h4 { font-size: 15px; font-weight: 700; }
+  .user-info p { font-size: 13px; color: var(--texto-soft); }
+  .user-info .role-tag {
+    display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 6px;
+    font-size: 11px; font-weight: 700;
+  }
+  .role-tag.admin { background: var(--coral-soft); color: var(--coral); }
+  .role-tag.biblio { background: var(--azul-soft); color: var(--azul); }
+
+  /* ══════════════════════════════════════
+     MODALES
+     ══════════════════════════════════════ */
   .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, .4);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 100;
+    align-items: center; justify-content: center; padding: 20px;
   }
   .modal-overlay.active { display: flex; }
   .modal {
-    background: var(--blanco);
-    border-radius: 18px;
-    padding: 28px;
-    width: 420px;
-    max-width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+    background: var(--blanco); border-radius: 18px; padding: 28px; width: 440px; max-width: 100%;
+    max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2);
     animation: modalIn .3s ease;
   }
-  @keyframes modalIn {
-    from { opacity: 0; transform: translateY(20px) scale(.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .modal h3 {
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 20px;
-    color: var(--coral);
-  }
+  @keyframes modalIn { from{opacity:0;transform:translateY(20px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+  .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: var(--coral); }
   .modal label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--texto-soft);
-    margin-bottom: 6px;
-    margin-top: 14px;
+    display: block; font-size: 13px; font-weight: 600; color: var(--texto-soft);
+    margin-bottom: 6px; margin-top: 14px;
   }
   .modal label:first-of-type { margin-top: 0; }
   .modal input, .modal select {
-    width: 100%;
-    padding: 11px 14px;
-    border: 2px solid var(--borde);
-    border-radius: 10px;
-    font-size: 15px;
-    font-family: inherit;
-    transition: border-color .2s;
+    width: 100%; padding: 11px 14px; border: 2px solid var(--borde); border-radius: 10px;
+    font-size: 15px; font-family: inherit; transition: border-color .2s;
   }
-  .modal input:focus, .modal select:focus {
-    outline: none;
-    border-color: var(--coral);
-  }
-  .modal-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 22px;
-  }
+  .modal input:focus, .modal select:focus { outline: none; border-color: var(--coral); }
+  .modal-buttons { display: flex; gap: 10px; margin-top: 22px; }
   .modal-buttons button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: inherit;
-    cursor: pointer;
-    transition: transform .15s;
+    flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+    font-family: inherit; cursor: pointer; transition: transform .15s;
   }
   .modal-buttons button:hover { transform: translateY(-2px); }
-  .modal-buttons .btn-save {
-    background: linear-gradient(135deg, var(--coral), #FF8E53);
-    color: #fff;
-  }
-  .modal-buttons .btn-cancel {
-    background: var(--bg);
-    color: var(--texto-soft);
-    border: 2px solid var(--borde);
-  }
+  .modal-buttons .btn-save { background: linear-gradient(135deg, var(--coral), var(--naranja)); color: #fff; }
+  .modal-buttons .btn-cancel { background: var(--bg); color: var(--texto-soft); border: 2px solid var(--borde); }
 
-  /* ── Footer ── */
-  footer {
-    text-align: center;
-    padding: 24px;
-    font-size: 13px;
-    color: var(--texto-soft);
-    border-top: 1px solid var(--borde);
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; background: var(--sidebar-bg); color: #fff;
+    padding: 14px 22px; border-radius: 12px; font-size: 14px; font-weight: 600; opacity: 0;
+    transform: translateY(10px); transition: .3s; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,.2);
   }
+  .toast.show { opacity: 1; transform: translateY(0); }
 
-  /* ── Responsive ── */
-  @media (max-width: 600px) {
-    header h1 { font-size: 24px; }
-    .stats { gap: 10px; }
-    .stat { min-width: 100px; padding: 12px 14px; }
-    .stat .num { font-size: 22px; }
-    .toolbar { flex-direction: column; }
-    .search-box { min-width: 100%; }
+  /* Overlay sidebar móvil */
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 25; }
+  .sidebar-overlay.show { display: block; }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+     ══════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .dash-grid { grid-template-columns: 1fr; }
+    .main-content { padding: 20px; }
+  }
+  @media (max-width: 768px) {
+    .hamburger { display: block; }
+    .sidebar {
+      position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 30;
+      transform: translateX(-100%); transition: transform .28s ease;
+      box-shadow: 4px 0 20px rgba(0,0,0,.15);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { padding: 18px 16px; max-height: none; }
+    .topbar-user { display: none; }
+    .dash-cards { grid-template-columns: 1fr 1fr; }
     .grid { grid-template-columns: 1fr; }
-    .modal { padding: 22px; }
+  }
+  @media (max-width: 480px) {
+    .dash-cards { grid-template-columns: 1fr; }
+    .login-card { padding: 32px 24px; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>📚 Biblioteca Duoc</h1>
-  <p>Gestión de libros — Duoc UC</p>
-</header>
-
-<div class="container">
-
-  <!-- Contadores -->
-  <div class="stats">
-    <div class="stat total">
-      <div class="num" id="statTotal">0</div>
-      <div class="lbl">Total</div>
+<!-- ════════════════════════════════════════
+     PANTALLA: LOGIN
+     ════════════════════════════════════════ -->
+<div id="loginScreen" class="screen active">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="icon">📚</div>
+      <h1>Biblioteca Duoc</h1>
+      <p>Sistema de gestión bibliotecaria</p>
     </div>
-    <div class="stat disp">
-      <div class="num" id="statDisp">0</div>
-      <div class="lbl">Disponibles</div>
+    <div class="field">
+      <label>Usuario</label>
+      <input id="loginUser" placeholder="Ingresa tu usuario" value="admin">
     </div>
-    <div class="stat prest">
-      <div class="num" id="statPrest">0</div>
-      <div class="lbl">Prestados</div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input id="loginPass" type="password" placeholder="Ingresa tu contraseña" value="1234">
+    </div>
+    <div class="field">
+      <label>Perfil</label>
+      <select id="loginRole">
+        <option value="admin">Administrador</option>
+        <option value="bibliotecario">Bibliotecario</option>
+      </select>
+    </div>
+    <button class="login-btn" onclick="login()">Iniciar sesión</button>
+    <div class="login-error" id="loginError">Usuario o contraseña incorrectos.</div>
+    <div class="login-hint">
+      <b>Credenciales de prueba:</b>
+      Usuario: <strong>admin</strong> · Contraseña: <strong>1234</strong> (Administrador)<br>
+      Usuario: <strong>biblio</strong> · Contraseña: <strong>1234</strong> (Bibliotecario)
     </div>
   </div>
-
-  <!-- Barra de herramientas -->
-  <div class="toolbar">
-    <div class="search-box">
-      <span class="icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Buscar por título o autor...">
-    </div>
-    <select class="filter-select" id="filterEstado">
-      <option value="todos">Todos</option>
-      <option value="disponible">Disponibles</option>
-      <option value="prestado">Prestados</option>
-    </select>
-    <select class="filter-select" id="filterGenero">
-      <option value="todos">Todos los géneros</option>
-    </select>
-    <button class="btn-add" onclick="abrirModal()">+ Agregar libro</button>
-  </div>
-
-  <!-- Grilla de libros -->
-  <div class="grid" id="grid"></div>
 </div>
 
-<footer>Biblioteca Duoc · Hecho con HTML, CSS y JavaScript · Datos guardados en tu navegador</footer>
+<!-- ════════════════════════════════════════
+     PANTALLA: APP
+     ════════════════════════════════════════ -->
+<div id="appScreen" class="screen">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title">📚 Biblioteca Duoc</div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-user" id="topUser">Admin</span>
+      <span class="topbar-role" id="topRole">Administrador</span>
+      <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </div>
 
-<!-- Modal para agregar / editar -->
+  <div class="app-body">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar"></nav>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+
+      <!-- ── DASHBOARD ── -->
+      <section class="page active" id="pageDashboard">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-sub">Resumen general de la biblioteca.</p>
+
+        <div class="dash-cards">
+          <div class="dash-card c-azul">
+            <div class="dc-icon">📖</div>
+            <div class="dc-val" id="dTotal">0</div>
+            <div class="dc-lbl">Total de libros</div>
+          </div>
+          <div class="dash-card c-verde">
+            <div class="dc-icon">✅</div>
+            <div class="dc-val" id="dDisp">0</div>
+            <div class="dc-lbl">Disponibles</div>
+          </div>
+          <div class="dash-card c-coral">
+            <div class="dc-icon">📤</div>
+            <div class="dc-val" id="dPrest">0</div>
+            <div class="dc-lbl">Prestados</div>
+          </div>
+          <div class="dash-card c-morado">
+            <div class="dc-icon">📁</div>
+            <div class="dc-val" id="dGeneros">0</div>
+            <div class="dc-lbl">Géneros</div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="panel">
+            <h3>📊 Libros por género</h3>
+            <div id="genreCharts"></div>
+          </div>
+          <div class="panel">
+            <h3>🕐 Actividad reciente</h3>
+            <div id="activityList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── CATÁLOGO ── -->
+      <section class="page" id="pageCatalogo">
+        <h2 class="page-title">Catálogo de libros</h2>
+        <p class="page-sub">Administra el inventario completo de la biblioteca.</p>
+        <div class="toolbar">
+          <div class="search-box">
+            <span class="icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Buscar por título o autor...">
+          </div>
+          <select class="filter-select" id="filterEstado">
+            <option value="todos">Todos</option>
+            <option value="disponible">Disponibles</option>
+            <option value="prestado">Prestados</option>
+          </select>
+          <select class="filter-select" id="filterGenero">
+            <option value="todos">Todos los géneros</option>
+          </select>
+          <button class="btn-add" onclick="abrirModal()">+ Agregar libro</button>
+        </div>
+        <div class="grid" id="grid"></div>
+      </section>
+
+      <!-- ── PRÉSTAMOS ── -->
+      <section class="page" id="pagePrestamos">
+        <h2 class="page-title">Historial de préstamos</h2>
+        <p class="page-sub">Registro de todos los préstamos y devoluciones.</p>
+        <div class="panel">
+          <div class="table-wrap">
+            <table class="data" id="tablaPrestamos">
+              <thead>
+                <tr><th>Libro</th><th>Prestatario</th><th>Fecha préstamo</th><th>Estado</th><th>Acción</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── USUARIOS (solo admin) ── -->
+      <section class="page" id="pageUsuarios">
+        <h2 class="page-title">Usuarios del sistema</h2>
+        <p class="page-sub">Usuarios registrados en la plataforma.</p>
+        <div class="user-grid" id="userGrid"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Modal: agregar / editar libro -->
 <div class="modal-overlay" id="modalOverlay" onclick="cerrarModalFondo(event)">
   <div class="modal">
     <h3 id="modalTitle">Agregar libro</h3>
@@ -431,7 +551,7 @@
     <label for="mAutor">Autor</label>
     <input id="mAutor" placeholder="Ej: Gabriel García Márquez">
     <label for="mGenero">Género</label>
-    <input id="mGenero" placeholder="Ej: Novela, Ciencia Ficción, Historia...">
+    <input id="mGenero" placeholder="Ej: Novela, Ciencia Ficción...">
     <label for="mAnio">Año de publicación</label>
     <input id="mAnio" type="number" placeholder="Ej: 1967">
     <div class="modal-buttons">
@@ -441,12 +561,12 @@
   </div>
 </div>
 
-<!-- Modal para prestar -->
+<!-- Modal: prestar libro -->
 <div class="modal-overlay" id="prestarOverlay" onclick="cerrarModalFondo(event)">
   <div class="modal">
     <h3>📖 Prestar libro</h3>
     <label for="mPrestatario">¿A quién se lo prestas?</label>
-    <input id="mPrestatario" placeholder="Nombre de la persona">
+    <input id="mPrestatario" placeholder="Nombre completo">
     <input type="hidden" id="mPrestarId">
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="cerrarPrestar()">Cancelar</button>
@@ -455,49 +575,240 @@
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-  // ── Datos de ejemplo (se cargan solo la primera vez) ──
+  /* ══════════════════════════════════════
+     DATOS DE EJEMPLO
+     ══════════════════════════════════════ */
   const LIBROS_EJEMPLO = [
-    { id: 1, titulo: "Cien años de soledad", autor: "Gabriel García Márquez", genero: "Novela", anio: 1967, estado: "disponible", prestatario: "", fechaPrestamo: "" },
-    { id: 2, titulo: "1984", autor: "George Orwell", genero: "Ciencia Ficción", anio: 1949, estado: "disponible", prestatario: "", fechaPrestamo: "" },
-    { id: 3, titulo: "Don Quijote de la Mancha", autor: "Miguel de Cervantes", genero: "Novela", anio: 1605, estado: "prestado", prestatario: "Carlos Díaz", fechaPrestamo: "2026-06-20" },
-    { id: 4, titulo: "El Principito", autor: "Antoine de Saint-Exupéry", genero: "Infantil", anio: 1943, estado: "disponible", prestatario: "", fechaPrestamo: "" },
-    { id: 5, titulo: "Breve historia del tiempo", autor: "Stephen Hawking", genero: "Ciencia", anio: 1988, estado: "disponible", prestatario: "", fechaPrestamo: "" },
-    { id: 6, titulo: "La casa de los espíritus", autor: "Isabel Allende", genero: "Novela", anio: 1982, estado: "prestado", prestatario: "María López", fechaPrestamo: "2026-06-18" }
+    { id:1, titulo:"Cien años de soledad", autor:"Gabriel García Márquez", genero:"Novela", anio:1967, estado:"disponible", prestatario:"", fechaPrestamo:"" },
+    { id:2, titulo:"1984", autor:"George Orwell", genero:"Ciencia Ficción", anio:1949, estado:"disponible", prestatario:"", fechaPrestamo:"" },
+    { id:3, titulo:"Don Quijote de la Mancha", autor:"Miguel de Cervantes", genero:"Clásico", anio:1605, estado:"prestado", prestatario:"Carlos Díaz", fechaPrestamo:"2026-06-20" },
+    { id:4, titulo:"El Principito", autor:"Antoine de Saint-Exupéry", genero:"Infantil", anio:1943, estado:"disponible", prestatario:"", fechaPrestamo:"" },
+    { id:5, titulo:"Breve historia del tiempo", autor:"Stephen Hawking", genero:"Ciencia", anio:1988, estado:"prestado", prestatario:"Ana Morales", fechaPrestamo:"2026-06-15" },
+    { id:6, titulo:"La casa de los espíritus", autor:"Isabel Allende", genero:"Novela", anio:1982, estado:"disponible", prestatario:"", fechaPrestamo:"" },
+    { id:7, titulo:"Fahrenheit 451", autor:"Ray Bradbury", genero:"Ciencia Ficción", anio:1953, estado:"disponible", prestatario:"", fechaPrestamo:"" },
+    { id:8, titulo:"Orgullo y prejuicio", autor:"Jane Austen", genero:"Clásico", anio:1813, estado:"prestado", prestatario:"María López", fechaPrestamo:"2026-06-18" },
+    { id:9, titulo:"El código Da Vinci", autor:"Dan Brown", genero:"Misterio", anio:2003, estado:"disponible", prestatario:"", fechaPrestamo:"" },
+    { id:10, titulo:"Sapiens", autor:"Yuval Noah Harari", genero:"Historia", anio:2011, estado:"disponible", prestatario:"", fechaPrestamo:"" },
+    { id:11, titulo:"Harry Potter y la piedra filosofal", autor:"J.K. Rowling", genero:"Fantasía", anio:1997, estado:"disponible", prestatario:"", fechaPrestamo:"" },
+    { id:12, titulo:"Rayuela", autor:"Julio Cortázar", genero:"Novela", anio:1963, estado:"prestado", prestatario:"Pedro Soto", fechaPrestamo:"2026-06-22" }
   ];
 
-  // ── Estado de la aplicación ──
-  let libros = [];
-  let editandoId = null;
+  const HISTORIAL_EJEMPLO = [
+    { libroId:3, libro:"Don Quijote de la Mancha", prestatario:"Carlos Díaz", fecha:"2026-06-20", estado:"activo" },
+    { libroId:5, libro:"Breve historia del tiempo", prestatario:"Ana Morales", fecha:"2026-06-15", estado:"activo" },
+    { libroId:8, libro:"Orgullo y prejuicio", prestatario:"María López", fecha:"2026-06-18", estado:"activo" },
+    { libroId:12, libro:"Rayuela", prestatario:"Pedro Soto", fecha:"2026-06-22", estado:"activo" },
+    { libroId:1, libro:"Cien años de soledad", prestatario:"Luis Fernández", fecha:"2026-06-01", devolucion:"2026-06-10", estado:"devuelto" },
+    { libroId:2, libro:"1984", prestatario:"Sofía Reyes", fecha:"2026-05-20", devolucion:"2026-06-05", estado:"devuelto" },
+    { libroId:9, libro:"El código Da Vinci", prestatario:"Tomás Herrera", fecha:"2026-05-15", devolucion:"2026-05-30", estado:"devuelto" }
+  ];
 
-  // ── Inicialización ──
-  function init() {
-    const guardado = localStorage.getItem("biblioteca_duoc");
-    if (guardado) {
-      libros = JSON.parse(guardado);
-    } else {
-      libros = JSON.parse(JSON.stringify(LIBROS_EJEMPLO));
-      guardar();
-    }
-    actualizarGeneros();
-    renderizar();
+  const USUARIOS = [
+    { nombre:"Lukas Ávila", usuario:"admin", rol:"admin", email:"admin@biblioteca.duoc.cl" },
+    { nombre:"Camila Torres", usuario:"biblio", rol:"bibliotecario", email:"c.torres@biblioteca.duoc.cl" },
+    { nombre:"Diego Muñoz", usuario:"diego.m", rol:"bibliotecario", email:"d.munoz@biblioteca.duoc.cl" },
+    { nombre:"Valentina Rojas", usuario:"val.rojas", rol:"admin", email:"v.rojas@biblioteca.duoc.cl" }
+  ];
+
+  const COLORES_GENERO = [
+    'var(--coral)','var(--azul)','var(--verde)','var(--morado)',
+    'var(--naranja)','var(--amarillo)','#4ECDC4','#E056A0'
+  ];
+
+  /* ══════════════════════════════════════
+     ESTADO
+     ══════════════════════════════════════ */
+  let libros = [];
+  let historial = [];
+  let editandoId = null;
+  let rolActual = 'admin';
+
+  /* ══════════════════════════════════════
+     NAVEGACIÓN: SIDEBAR + PÁGINAS
+     ══════════════════════════════════════ */
+  const NAV = {
+    admin: [
+      { sep: "Principal" },
+      { id:"pageDashboard", ic:"📊", label:"Dashboard" },
+      { id:"pageCatalogo", ic:"📖", label:"Catálogo" },
+      { id:"pagePrestamos", ic:"📋", label:"Préstamos" },
+      { sep: "Administración" },
+      { id:"pageUsuarios", ic:"👥", label:"Usuarios" }
+    ],
+    bibliotecario: [
+      { sep: "Principal" },
+      { id:"pageDashboard", ic:"📊", label:"Dashboard" },
+      { id:"pageCatalogo", ic:"📖", label:"Catálogo" },
+      { id:"pagePrestamos", ic:"📋", label:"Préstamos" }
+    ]
+  };
+
+  function buildNav(role) {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.innerHTML = '';
+    let first = null;
+    NAV[role].forEach(item => {
+      if (item.sep) {
+        const s = document.createElement('div'); s.className = 'nav-sep'; s.textContent = item.sep;
+        sidebar.appendChild(s); return;
+      }
+      const d = document.createElement('div'); d.className = 'nav-item'; d.dataset.target = item.id;
+      d.innerHTML = `<span class="ic">${item.ic}</span>${item.label}`;
+      d.onclick = () => navegar(item.id);
+      sidebar.appendChild(d);
+      if (!first) first = item.id;
+    });
+    navegar(first);
   }
 
-  // ── Persistencia ──
-  function guardar() {
-    localStorage.setItem("biblioteca_duoc", JSON.stringify(libros));
+  function navegar(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.target === id));
+    if (window.innerWidth <= 768) closeSidebar();
+    if (id === 'pageDashboard') renderDashboard();
+    if (id === 'pageCatalogo') renderCatalogo();
+    if (id === 'pagePrestamos') renderPrestamos();
+    if (id === 'pageUsuarios') renderUsuarios();
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+  }
+
+  /* ══════════════════════════════════════
+     LOGIN / LOGOUT
+     ══════════════════════════════════════ */
+  function login() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+    const role = document.getElementById('loginRole').value;
+    const errEl = document.getElementById('loginError');
+
+    const valid = (user === 'admin' || user === 'biblio') && pass === '1234';
+    if (!valid) {
+      errEl.style.display = 'block';
+      errEl.style.animation = 'none'; void errEl.offsetWidth; errEl.style.animation = 'shake .4s';
+      return;
+    }
+    errEl.style.display = 'none';
+    rolActual = user === 'admin' ? 'admin' : 'bibliotecario';
+
+    const nombres = { admin: 'Lukas Ávila', biblio: 'Camila Torres' };
+    const roles = { admin: 'Administrador', bibliotecario: 'Bibliotecario' };
+    document.getElementById('topUser').textContent = nombres[user] || user;
+    document.getElementById('topRole').textContent = roles[rolActual];
+
+    cargarDatos();
+    buildNav(rolActual);
+    document.getElementById('loginScreen').classList.remove('active');
+    document.getElementById('appScreen').classList.add('active');
+    toast(`Bienvenido/a, ${nombres[user]}`);
+  }
+
+  function logout() {
+    document.getElementById('appScreen').classList.remove('active');
+    document.getElementById('loginScreen').classList.add('active');
+  }
+
+  document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+  document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+  /* ══════════════════════════════════════
+     DATOS (localStorage)
+     ══════════════════════════════════════ */
+  function cargarDatos() {
+    const gl = localStorage.getItem('bduoc_libros');
+    const gh = localStorage.getItem('bduoc_historial');
+    libros = gl ? JSON.parse(gl) : JSON.parse(JSON.stringify(LIBROS_EJEMPLO));
+    historial = gh ? JSON.parse(gh) : JSON.parse(JSON.stringify(HISTORIAL_EJEMPLO));
+    if (!gl) guardarDatos();
+    if (!gh) guardarDatos();
+  }
+
+  function guardarDatos() {
+    localStorage.setItem('bduoc_libros', JSON.stringify(libros));
+    localStorage.setItem('bduoc_historial', JSON.stringify(historial));
   }
 
   function siguienteId() {
-    if (libros.length === 0) return 1;
-    return Math.max(...libros.map(l => l.id)) + 1;
+    return libros.length === 0 ? 1 : Math.max(...libros.map(l => l.id)) + 1;
   }
 
-  // ── Renderizado ──
-  function renderizar() {
+  function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+  /* ══════════════════════════════════════
+     DASHBOARD
+     ══════════════════════════════════════ */
+  function renderDashboard() {
+    const total = libros.length;
+    const disp = libros.filter(l => l.estado === 'disponible').length;
+    const prest = libros.filter(l => l.estado === 'prestado').length;
+    const generos = [...new Set(libros.map(l => l.genero))];
+
+    document.getElementById('dTotal').textContent = total;
+    document.getElementById('dDisp').textContent = disp;
+    document.getElementById('dPrest').textContent = prest;
+    document.getElementById('dGeneros').textContent = generos.length;
+
+    // Barras por género
+    const conteo = {};
+    libros.forEach(l => { conteo[l.genero] = (conteo[l.genero] || 0) + 1; });
+    const sorted = Object.entries(conteo).sort((a, b) => b[1] - a[1]);
+    const max = sorted.length ? sorted[0][1] : 1;
+
+    document.getElementById('genreCharts').innerHTML = sorted.map(([gen, cant], i) => {
+      const pct = Math.round((cant / total) * 100);
+      const color = COLORES_GENERO[i % COLORES_GENERO.length];
+      return `<div class="genre-bar">
+        <div class="gb-label"><span>${esc(gen)}</span><span>${cant} libro${cant > 1 ? 's' : ''} (${pct}%)</span></div>
+        <div class="gb-track"><div class="gb-fill" style="width:${pct}%;background:${color}"></div></div>
+      </div>`;
+    }).join('');
+
+    // Actividad reciente
+    const recientes = historial.slice(0, 6);
+    document.getElementById('activityList').innerHTML = recientes.length
+      ? recientes.map(h => {
+          const esActivo = h.estado === 'activo';
+          const icClass = esActivo ? 'prestamo' : 'devolucion';
+          const icEmoji = esActivo ? '📤' : '↩️';
+          const texto = esActivo
+            ? `<b>${esc(h.prestatario)}</b> tomó prestado <b>${esc(h.libro)}</b>`
+            : `<b>${esc(h.prestatario)}</b> devolvió <b>${esc(h.libro)}</b>`;
+          const fecha = esActivo ? h.fecha : h.devolucion;
+          return `<div class="activity-item">
+            <div class="ai-icon ${icClass}">${icEmoji}</div>
+            <div class="ai-text">${texto}</div>
+            <div class="ai-date">${fecha}</div>
+          </div>`;
+        }).join('')
+      : '<p style="color:var(--texto-soft);font-size:14px;padding:20px 0;text-align:center">Sin actividad registrada</p>';
+
+    // Animar barras
+    setTimeout(() => {
+      document.querySelectorAll('#genreCharts .gb-fill').forEach(bar => {
+        const w = bar.style.width; bar.style.width = '0';
+        requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = w; }));
+      });
+    }, 50);
+  }
+
+  /* ══════════════════════════════════════
+     CATÁLOGO
+     ══════════════════════════════════════ */
+  function renderCatalogo() {
+    actualizarGeneros();
     const filtrados = filtrar();
-    actualizarContadores();
-    const grid = document.getElementById("grid");
+    const grid = document.getElementById('grid');
 
     if (filtrados.length === 0) {
       grid.innerHTML = '<div class="empty"><div class="emoji">📭</div><p>No se encontraron libros</p></div>';
@@ -505,204 +816,196 @@
     }
 
     grid.innerHTML = filtrados.map(libro => {
-      const esPrestado = libro.estado === "prestado";
-      return `
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">${esc(libro.titulo)}</div>
-            <span class="card-badge ${libro.estado}">${esPrestado ? "Prestado" : "Disponible"}</span>
-          </div>
-          <div class="card-info">
-            <span>✍️ ${esc(libro.autor)}</span>
-            <span>📁 ${esc(libro.genero)} · 📅 ${libro.anio}</span>
-          </div>
-          ${esPrestado ? `<div class="card-prestamo">👤 ${esc(libro.prestatario)} · desde ${libro.fechaPrestamo}</div>` : ""}
-          <div class="card-actions">
-            ${esPrestado
-              ? `<button class="btn-devolver" onclick="devolver(${libro.id})">↩ Devolver</button>`
-              : `<button class="btn-prestar" onclick="abrirPrestar(${libro.id})">📖 Prestar</button>`
-            }
-            <button class="btn-editar" onclick="editar(${libro.id})">✏️ Editar</button>
-            <button class="btn-eliminar" onclick="eliminar(${libro.id})">🗑️ Eliminar</button>
-          </div>
-        </div>`;
-    }).join("");
+      const esPrestado = libro.estado === 'prestado';
+      return `<div class="card">
+        <div class="card-header">
+          <div class="card-title">${esc(libro.titulo)}</div>
+          <span class="card-badge ${libro.estado}">${esPrestado ? 'Prestado' : 'Disponible'}</span>
+        </div>
+        <div class="card-info">
+          <span>✍️ ${esc(libro.autor)}</span>
+          <span>📁 ${esc(libro.genero)} · 📅 ${libro.anio}</span>
+        </div>
+        ${esPrestado ? `<div class="card-prestamo">👤 ${esc(libro.prestatario)} · desde ${libro.fechaPrestamo}</div>` : ''}
+        <div class="card-actions">
+          ${esPrestado
+            ? `<button class="btn-devolver" onclick="devolver(${libro.id})">↩ Devolver</button>`
+            : `<button class="btn-prestar" onclick="abrirPrestar(${libro.id})">📖 Prestar</button>`}
+          <button class="btn-editar" onclick="editar(${libro.id})">✏️ Editar</button>
+          <button class="btn-eliminar" onclick="eliminar(${libro.id})">🗑️ Eliminar</button>
+        </div>
+      </div>`;
+    }).join('');
   }
 
-  // Escapar HTML para evitar inyección
-  function esc(texto) {
-    const div = document.createElement("div");
-    div.textContent = texto;
-    return div.innerHTML;
-  }
-
-  // ── Filtros ──
   function filtrar() {
-    const busqueda = document.getElementById("searchInput").value.toLowerCase();
-    const estado = document.getElementById("filterEstado").value;
-    const genero = document.getElementById("filterGenero").value;
-
+    const busqueda = document.getElementById('searchInput').value.toLowerCase();
+    const estado = document.getElementById('filterEstado').value;
+    const genero = document.getElementById('filterGenero').value;
     return libros.filter(l => {
-      const coincideBusqueda = l.titulo.toLowerCase().includes(busqueda) || l.autor.toLowerCase().includes(busqueda);
-      const coincidenEstado = estado === "todos" || l.estado === estado;
-      const coincidenGenero = genero === "todos" || l.genero === genero;
-      return coincideBusqueda && coincidenEstado && coincidenGenero;
+      const b = l.titulo.toLowerCase().includes(busqueda) || l.autor.toLowerCase().includes(busqueda);
+      const e = estado === 'todos' || l.estado === estado;
+      const g = genero === 'todos' || l.genero === genero;
+      return b && e && g;
     });
-  }
-
-  function actualizarContadores() {
-    const total = libros.length;
-    const disponibles = libros.filter(l => l.estado === "disponible").length;
-    const prestados = libros.filter(l => l.estado === "prestado").length;
-    document.getElementById("statTotal").textContent = total;
-    document.getElementById("statDisp").textContent = disponibles;
-    document.getElementById("statPrest").textContent = prestados;
   }
 
   function actualizarGeneros() {
-    const select = document.getElementById("filterGenero");
+    const select = document.getElementById('filterGenero');
     const generos = [...new Set(libros.map(l => l.genero).filter(Boolean))].sort();
-    const valorActual = select.value;
+    const val = select.value;
     select.innerHTML = '<option value="todos">Todos los géneros</option>';
-    generos.forEach(g => {
-      select.innerHTML += `<option value="${esc(g)}">${esc(g)}</option>`;
-    });
-    select.value = valorActual;
+    generos.forEach(g => { select.innerHTML += `<option value="${esc(g)}">${esc(g)}</option>`; });
+    select.value = val;
   }
 
-  // ── Modal agregar / editar ──
+  document.getElementById('searchInput').addEventListener('input', renderCatalogo);
+  document.getElementById('filterEstado').addEventListener('change', renderCatalogo);
+  document.getElementById('filterGenero').addEventListener('change', renderCatalogo);
+
+  /* ══════════════════════════════════════
+     CRUD LIBROS
+     ══════════════════════════════════════ */
   function abrirModal(id) {
     editandoId = id || null;
-    document.getElementById("modalTitle").textContent = id ? "Editar libro" : "Agregar libro";
-
+    document.getElementById('modalTitle').textContent = id ? 'Editar libro' : 'Agregar libro';
     if (id) {
-      const libro = libros.find(l => l.id === id);
-      document.getElementById("mTitulo").value = libro.titulo;
-      document.getElementById("mAutor").value = libro.autor;
-      document.getElementById("mGenero").value = libro.genero;
-      document.getElementById("mAnio").value = libro.anio;
+      const l = libros.find(x => x.id === id);
+      document.getElementById('mTitulo').value = l.titulo;
+      document.getElementById('mAutor').value = l.autor;
+      document.getElementById('mGenero').value = l.genero;
+      document.getElementById('mAnio').value = l.anio;
     } else {
-      document.getElementById("mTitulo").value = "";
-      document.getElementById("mAutor").value = "";
-      document.getElementById("mGenero").value = "";
-      document.getElementById("mAnio").value = "";
+      ['mTitulo','mAutor','mGenero','mAnio'].forEach(x => document.getElementById(x).value = '');
     }
-
-    document.getElementById("modalOverlay").classList.add("active");
-    document.getElementById("mTitulo").focus();
+    document.getElementById('modalOverlay').classList.add('active');
+    document.getElementById('mTitulo').focus();
   }
 
   function cerrarModal() {
-    document.getElementById("modalOverlay").classList.remove("active");
+    document.getElementById('modalOverlay').classList.remove('active');
     editandoId = null;
   }
 
   function guardarLibro() {
-    const titulo = document.getElementById("mTitulo").value.trim();
-    const autor = document.getElementById("mAutor").value.trim();
-    const genero = document.getElementById("mGenero").value.trim();
-    const anio = parseInt(document.getElementById("mAnio").value);
-
-    if (!titulo || !autor || !genero || isNaN(anio)) {
-      alert("Completa todos los campos correctamente.");
-      return;
-    }
+    const titulo = document.getElementById('mTitulo').value.trim();
+    const autor = document.getElementById('mAutor').value.trim();
+    const genero = document.getElementById('mGenero').value.trim();
+    const anio = parseInt(document.getElementById('mAnio').value);
+    if (!titulo || !autor || !genero || isNaN(anio)) { alert('Completa todos los campos.'); return; }
 
     if (editandoId) {
-      const libro = libros.find(l => l.id === editandoId);
-      libro.titulo = titulo;
-      libro.autor = autor;
-      libro.genero = genero;
-      libro.anio = anio;
+      const l = libros.find(x => x.id === editandoId);
+      l.titulo = titulo; l.autor = autor; l.genero = genero; l.anio = anio;
+      toast('Libro actualizado');
     } else {
-      libros.push({
-        id: siguienteId(),
-        titulo, autor, genero, anio,
-        estado: "disponible",
-        prestatario: "",
-        fechaPrestamo: ""
-      });
+      libros.push({ id: siguienteId(), titulo, autor, genero, anio, estado:'disponible', prestatario:'', fechaPrestamo:'' });
+      toast('Libro agregado al catálogo');
     }
-
-    guardar();
-    actualizarGeneros();
-    renderizar();
-    cerrarModal();
+    guardarDatos(); renderCatalogo(); cerrarModal();
   }
 
-  function editar(id) {
-    abrirModal(id);
-  }
+  function editar(id) { abrirModal(id); }
 
   function eliminar(id) {
-    const libro = libros.find(l => l.id === id);
-    if (!confirm(`¿Eliminar "${libro.titulo}"?`)) return;
-    libros = libros.filter(l => l.id !== id);
-    guardar();
-    actualizarGeneros();
-    renderizar();
+    const l = libros.find(x => x.id === id);
+    if (!confirm(`¿Eliminar "${l.titulo}"?`)) return;
+    libros = libros.filter(x => x.id !== id);
+    guardarDatos(); renderCatalogo(); toast('Libro eliminado');
   }
 
-  // ── Préstamo / devolución ──
+  /* ══════════════════════════════════════
+     PRÉSTAMOS / DEVOLUCIONES
+     ══════════════════════════════════════ */
   function abrirPrestar(id) {
-    document.getElementById("mPrestarId").value = id;
-    document.getElementById("mPrestatario").value = "";
-    document.getElementById("prestarOverlay").classList.add("active");
-    document.getElementById("mPrestatario").focus();
+    document.getElementById('mPrestarId').value = id;
+    document.getElementById('mPrestatario').value = '';
+    document.getElementById('prestarOverlay').classList.add('active');
+    document.getElementById('mPrestatario').focus();
   }
-
-  function cerrarPrestar() {
-    document.getElementById("prestarOverlay").classList.remove("active");
-  }
+  function cerrarPrestar() { document.getElementById('prestarOverlay').classList.remove('active'); }
 
   function confirmarPrestamo() {
-    const nombre = document.getElementById("mPrestatario").value.trim();
-    if (!nombre) {
-      alert("Ingresa el nombre de la persona.");
-      return;
-    }
-    const id = parseInt(document.getElementById("mPrestarId").value);
+    const nombre = document.getElementById('mPrestatario').value.trim();
+    if (!nombre) { alert('Ingresa el nombre.'); return; }
+    const id = parseInt(document.getElementById('mPrestarId').value);
     const libro = libros.find(l => l.id === id);
-    libro.estado = "prestado";
-    libro.prestatario = nombre;
-    libro.fechaPrestamo = new Date().toISOString().slice(0, 10);
-    guardar();
-    renderizar();
-    cerrarPrestar();
+    const fecha = new Date().toISOString().slice(0, 10);
+    libro.estado = 'prestado'; libro.prestatario = nombre; libro.fechaPrestamo = fecha;
+    historial.unshift({ libroId: id, libro: libro.titulo, prestatario: nombre, fecha, estado: 'activo' });
+    guardarDatos(); renderCatalogo(); cerrarPrestar();
+    toast(`"${libro.titulo}" prestado a ${nombre}`);
   }
 
   function devolver(id) {
     const libro = libros.find(l => l.id === id);
-    libro.estado = "disponible";
-    libro.prestatario = "";
-    libro.fechaPrestamo = "";
-    guardar();
-    renderizar();
+    const fecha = new Date().toISOString().slice(0, 10);
+    const reg = historial.find(h => h.libroId === id && h.estado === 'activo');
+    if (reg) { reg.estado = 'devuelto'; reg.devolucion = fecha; }
+    libro.estado = 'disponible'; libro.prestatario = ''; libro.fechaPrestamo = '';
+    guardarDatos(); renderCatalogo();
+    toast(`"${libro.titulo}" devuelto`);
   }
 
-  // Cerrar modales al hacer clic fuera
+  function devolverDesdeTabla(libroId) {
+    devolver(libroId);
+    renderPrestamos();
+  }
+
+  /* ══════════════════════════════════════
+     TABLA PRÉSTAMOS
+     ══════════════════════════════════════ */
+  function renderPrestamos() {
+    const tbody = document.querySelector('#tablaPrestamos tbody');
+    if (historial.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--texto-soft)">Sin préstamos registrados</td></tr>';
+      return;
+    }
+    tbody.innerHTML = historial.map(h => {
+      const esActivo = h.estado === 'activo';
+      return `<tr>
+        <td><b>${esc(h.libro)}</b></td>
+        <td>${esc(h.prestatario)}</td>
+        <td>${h.fecha}</td>
+        <td><span class="pill ${esActivo ? 'activo' : 'devuelto'}">${esActivo ? 'Prestado' : 'Devuelto'}</span></td>
+        <td>${esActivo ? `<button class="btn-table" onclick="devolverDesdeTabla(${h.libroId})">↩ Devolver</button>` : `<span style="font-size:12px;color:var(--texto-light)">${h.devolucion}</span>`}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  /* ══════════════════════════════════════
+     USUARIOS
+     ══════════════════════════════════════ */
+  function renderUsuarios() {
+    document.getElementById('userGrid').innerHTML = USUARIOS.map(u => {
+      const esAdmin = u.rol === 'admin';
+      return `<div class="user-card">
+        <div class="user-avatar ${esAdmin ? 'admin' : 'biblio'}">${esAdmin ? '👑' : '📚'}</div>
+        <div class="user-info">
+          <h4>${esc(u.nombre)}</h4>
+          <p>${esc(u.email)}</p>
+          <span class="role-tag ${esAdmin ? 'admin' : 'biblio'}">${esAdmin ? 'Administrador' : 'Bibliotecario'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ══════════════════════════════════════
+     UTILIDADES
+     ══════════════════════════════════════ */
   function cerrarModalFondo(e) {
-    if (e.target === e.currentTarget) {
-      cerrarModal();
-      cerrarPrestar();
-    }
+    if (e.target === e.currentTarget) { cerrarModal(); cerrarPrestar(); }
   }
 
-  // ── Eventos de filtros en vivo ──
-  document.getElementById("searchInput").addEventListener("input", renderizar);
-  document.getElementById("filterEstado").addEventListener("change", renderizar);
-  document.getElementById("filterGenero").addEventListener("change", renderizar);
+  let tt;
+  function toast(msg) {
+    const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2500);
+  }
 
-  // Cerrar modales con Escape
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
-      cerrarModal();
-      cerrarPrestar();
-    }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { cerrarModal(); cerrarPrestar(); }
   });
-
-  // Iniciar la aplicación
-  init();
 </script>
 </body>
 </html>
