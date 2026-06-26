@@ -1,940 +1,394 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#FF6B6B">
-<title>Biblioteca Duoc</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lukas Ávila — Desarrollador</title>
+<meta name="description" content="Lukas Ávila — Desarrollador Java/Spring Boot y React. Estudiante de Ingeniería en Informática, Duoc UC. Disponible para proyectos freelance." />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --coral: #FF6B6B;
-    --coral-dark: #E85D5D;
-    --coral-soft: rgba(255,107,107,.10);
-    --naranja: #FF8E53;
-    --amarillo: #FFD93D;
-    --amarillo-soft: #FFF8E1;
-    --verde: #6BCB77;
-    --verde-dark: #5AB868;
-    --verde-soft: rgba(107,203,119,.12);
-    --azul: #4D96FF;
-    --azul-soft: #EBF3FF;
-    --morado: #A66CFF;
-    --morado-soft: rgba(166,108,255,.10);
-    --bg: #F5F6FA;
-    --blanco: #FFFFFF;
-    --texto: #2D3436;
-    --texto-soft: #636E72;
-    --texto-light: #B2BEC3;
-    --borde: #E8E8E8;
-    --sombra: rgba(0,0,0,.06);
-    --sidebar-bg: #1E272E;
-    --sidebar-hover: #2C3A47;
-    --radius: 14px;
+    --bg: #0c0c0d;
+    --bg-soft: #151517;
+    --bg-card: #161618;
+    --line: #26262a;
+    --line-soft: #1d1d20;
+    --text: #f2f2f0;
+    --text-dim: #a0a0a3;
+    --text-faint: #6a6a6e;
+    --accent: #d6ff3f;
+    --accent-dim: #aacb2f;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+    --maxw: 1080px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--texto); min-height: 100vh; overflow-x: hidden; }
-  .screen { display: none; min-height: 100vh; }
-  .screen.active { display: flex; }
 
-  /* ══════════════════════════════════════
-     LOGIN
-     ══════════════════════════════════════ */
-  #loginScreen {
-    align-items: center; justify-content: center; padding: 20px;
-    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFD93D 100%);
-    background-size: 300% 300%; animation: bgMove 8s ease infinite;
-  }
-  @keyframes bgMove { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-  .login-card {
-    background: var(--blanco); border-radius: 22px; padding: 44px 38px; width: 400px; max-width: 100%;
-    box-shadow: 0 30px 80px rgba(0,0,0,.18); animation: cardPop .6s cubic-bezier(.16,1,.3,1) both;
-  }
-  @keyframes cardPop { 0%{opacity:0;transform:translateY(30px) scale(.95)} 100%{opacity:1;transform:translateY(0) scale(1)} }
-  .login-brand { text-align: center; margin-bottom: 30px; }
-  .login-brand .icon { font-size: 52px; margin-bottom: 10px; }
-  .login-brand h1 { font-size: 28px; font-weight: 800; color: var(--coral); }
-  .login-brand p { font-size: 14px; color: var(--texto-soft); margin-top: 4px; }
-  .field { margin-top: 18px; }
-  .field label { display: block; font-size: 13px; font-weight: 700; color: var(--texto-soft); margin-bottom: 6px; }
-  .field input {
-    width: 100%; padding: 13px 16px; border: 2px solid var(--borde); border-radius: 12px;
-    font-size: 15px; font-family: inherit; background: var(--bg); transition: border-color .2s;
-  }
-  .field input:focus { outline: none; border-color: var(--coral); }
-  .login-btn {
-    width: 100%; padding: 14px; margin-top: 26px;
-    background: linear-gradient(135deg, var(--coral), var(--naranja));
-    color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 800;
-    font-family: inherit; cursor: pointer; transition: transform .15s, box-shadow .2s;
-    box-shadow: 0 8px 24px rgba(255,107,107,.3);
-  }
-  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,107,107,.4); }
-  .login-btn:active { transform: scale(.98); }
-  .login-error {
-    display: none; margin-top: 14px; padding: 10px 14px; border-radius: 10px;
-    background: var(--coral-soft); color: var(--coral-dark); font-size: 13px; font-weight: 600;
-    text-align: center; animation: shake .4s;
-  }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-  .login-hint {
-    margin-top: 20px; padding: 14px; border-radius: 10px; background: var(--azul-soft);
-    font-size: 12px; color: var(--azul); line-height: 1.8;
-  }
-  .login-hint b { display: block; margin-bottom: 4px; font-size: 13px; }
-  .login-hint .hint-role { display: inline-block; min-width: 90px; font-weight: 700; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* ══════════════════════════════════════
-     APP SHELL
-     ══════════════════════════════════════ */
-  #appScreen { flex-direction: column; }
-  .topbar {
-    background: var(--blanco); border-bottom: 1px solid var(--borde); padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between; height: 60px;
-    position: sticky; top: 0; z-index: 20; box-shadow: 0 1px 4px var(--sombra);
-  }
-  .topbar-left { display: flex; align-items: center; gap: 14px; }
-  .hamburger {
-    display: none; background: none; border: 1px solid var(--borde); border-radius: 8px;
-    padding: 6px 10px; cursor: pointer; font-size: 20px; color: var(--texto);
-  }
-  .topbar-title { font-size: 18px; font-weight: 800; color: var(--coral); }
-  .topbar-right { display: flex; align-items: center; gap: 14px; }
-  .topbar-user { font-size: 14px; color: var(--texto-soft); }
-  .topbar-role {
-    font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 700;
-  }
-  .topbar-role.admin { background: var(--coral-soft); color: var(--coral); }
-  .topbar-role.bibliotecario { background: var(--azul-soft); color: var(--azul); }
-  .topbar-role.usuario { background: var(--verde-soft); color: var(--verde-dark); }
-  .btn-logout {
-    background: none; border: 1px solid var(--borde); padding: 7px 14px; border-radius: 8px;
-    cursor: pointer; font-size: 13px; font-family: inherit; color: var(--texto-soft); transition: .2s;
-  }
-  .btn-logout:hover { border-color: var(--coral); color: var(--coral); }
-  .app-body { display: flex; flex: 1; }
+  html { scroll-behavior: smooth; }
 
-  /* Sidebar */
-  .sidebar {
-    width: 240px; background: var(--sidebar-bg); min-height: calc(100vh - 60px); padding: 20px 12px;
-    display: flex; flex-direction: column; gap: 4px; flex-shrink: 0;
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
-  .nav-sep {
-    font-size: 11px; text-transform: uppercase; color: rgba(255,255,255,.3); padding: 16px 14px 6px;
-    letter-spacing: .8px;
-  }
-  .nav-item {
-    display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px;
-    cursor: pointer; color: rgba(255,255,255,.6); font-size: 14px; font-weight: 600; transition: all .2s;
-  }
-  .nav-item:hover { background: var(--sidebar-hover); color: #fff; transform: translateX(3px); }
-  .nav-item.active {
-    background: linear-gradient(135deg, var(--coral), var(--naranja)); color: #fff;
-    box-shadow: 0 4px 16px rgba(255,107,107,.3);
-  }
-  .nav-item .ic { width: 22px; text-align: center; font-size: 16px; }
-  .main-content { flex: 1; padding: 28px 32px; overflow-y: auto; max-height: calc(100vh - 60px); }
-  .page { display: none; }
-  .page.active { display: block; animation: fadeIn .35s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-  .page-title { font-size: 24px; font-weight: 800; color: var(--texto); margin-bottom: 4px; }
-  .page-sub { font-size: 14px; color: var(--texto-soft); margin-bottom: 24px; }
 
-  /* ══════════════════════════════════════
-     DASHBOARD
-     ══════════════════════════════════════ */
-  .dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
-  .dash-card {
-    background: var(--blanco); border-radius: var(--radius); padding: 22px; position: relative;
-    box-shadow: 0 2px 12px var(--sombra); overflow: hidden; transition: transform .2s, box-shadow .2s;
-  }
-  .dash-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.08); }
-  .dash-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-  .dash-card.c-azul::before { background: var(--azul); }
-  .dash-card.c-verde::before { background: var(--verde); }
-  .dash-card.c-coral::before { background: var(--coral); }
-  .dash-card.c-morado::before { background: var(--morado); }
-  .dash-card .dc-icon { font-size: 28px; margin-bottom: 8px; }
-  .dash-card .dc-val { font-size: 32px; font-weight: 800; }
-  .dash-card.c-azul .dc-val { color: var(--azul); }
-  .dash-card.c-verde .dc-val { color: var(--verde); }
-  .dash-card.c-coral .dc-val { color: var(--coral); }
-  .dash-card.c-morado .dc-val { color: var(--morado); }
-  .dash-card .dc-lbl { font-size: 13px; color: var(--texto-soft); margin-top: 2px; }
-  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .panel {
-    background: var(--blanco); border-radius: var(--radius); padding: 24px;
-    box-shadow: 0 2px 12px var(--sombra);
-  }
-  .panel h3 { font-size: 16px; font-weight: 800; margin-bottom: 18px; color: var(--texto); }
-  .genre-bar { margin-bottom: 14px; }
-  .genre-bar .gb-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
-  .genre-bar .gb-label span:first-child { color: var(--texto); font-weight: 600; }
-  .genre-bar .gb-label span:last-child { color: var(--texto-soft); }
-  .genre-bar .gb-track { height: 10px; background: var(--bg); border-radius: 10px; overflow: hidden; }
-  .genre-bar .gb-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(.22,1,.36,1); }
-  .activity-item {
-    display: flex; align-items: center; gap: 12px; padding: 12px 0;
-    border-bottom: 1px solid var(--borde); font-size: 14px;
-  }
-  .activity-item:last-child { border-bottom: none; }
-  .activity-item .ai-icon {
-    width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center;
-    justify-content: center; font-size: 16px; flex-shrink: 0;
-  }
-  .activity-item .ai-icon.prestamo { background: var(--coral-soft); }
-  .activity-item .ai-icon.devolucion { background: var(--verde-soft); }
-  .activity-item .ai-text { flex: 1; color: var(--texto-soft); line-height: 1.4; }
-  .activity-item .ai-text b { color: var(--texto); }
-  .activity-item .ai-date { font-size: 12px; color: var(--texto-light); white-space: nowrap; }
+  ::selection { background: var(--accent); color: #000; }
 
-  /* ══════════════════════════════════════
-     CATÁLOGO
-     ══════════════════════════════════════ */
-  .toolbar {
-    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; align-items: center;
-  }
-  .search-box { flex: 1; min-width: 200px; position: relative; }
-  .search-box input {
-    width: 100%; padding: 12px 16px 12px 42px; border: 2px solid var(--borde); border-radius: 10px;
-    font-size: 15px; font-family: inherit; background: var(--blanco); transition: border-color .2s;
-  }
-  .search-box input:focus { outline: none; border-color: var(--coral); }
-  .search-box .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; opacity: .5; }
-  .filter-select {
-    padding: 12px 14px; border: 2px solid var(--borde); border-radius: 10px; font-size: 14px;
-    font-family: inherit; background: var(--blanco); cursor: pointer; transition: border-color .2s;
-  }
-  .filter-select:focus { outline: none; border-color: var(--coral); }
-  .btn-add {
-    padding: 12px 22px; background: linear-gradient(135deg, var(--coral), var(--naranja));
-    color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
-    font-family: inherit; cursor: pointer; transition: transform .15s, box-shadow .2s; white-space: nowrap;
-  }
-  .btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,107,.35); }
+  a { color: inherit; text-decoration: none; }
 
-  .grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; margin-bottom: 40px;
-  }
-  .card {
-    background: var(--blanco); border-radius: var(--radius); padding: 0;
-    box-shadow: 0 2px 12px var(--sombra); border: 2px solid transparent;
-    transition: transform .2s, box-shadow .2s, border-color .2s;
-    display: flex; flex-direction: row; overflow: hidden;
-  }
-  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.08); border-color: var(--amarillo); }
-  .card-cover {
-    width: 110px; min-height: 170px; flex-shrink: 0; background: var(--bg);
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
-  }
-  .card-cover img {
-    width: 100%; height: 100%; object-fit: cover;
-  }
-  .card-cover .cover-placeholder {
-    font-size: 40px; color: var(--texto-light); display: flex; align-items: center;
-    justify-content: center; width: 100%; height: 100%; background: linear-gradient(135deg, var(--bg), var(--borde));
-  }
-  .card-body {
-    flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 8px;
-  }
-  .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-  .card-title { font-size: 16px; font-weight: 700; line-height: 1.3; }
-  .card-badge {
-    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; flex-shrink: 0;
-  }
-  .card-badge.disponible { background: var(--verde-soft); color: var(--verde-dark); }
-  .card-badge.prestado { background: var(--coral-soft); color: var(--coral); }
-  .card-info { font-size: 13px; color: var(--texto-soft); line-height: 1.5; }
-  .card-info span { display: block; }
-  .card-prestamo {
-    font-size: 12px; color: var(--coral); background: var(--coral-soft);
-    padding: 6px 10px; border-radius: 8px;
-  }
-  .card-actions { display: flex; gap: 6px; margin-top: auto; padding-top: 4px; flex-wrap: wrap; }
-  .card-actions button {
-    padding: 6px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600;
-    font-family: inherit; cursor: pointer; transition: transform .1s;
-  }
-  .card-actions button:hover { transform: scale(1.04); }
-  .card-actions button:active { transform: scale(.97); }
-  .btn-prestar { background: var(--azul-soft); color: var(--azul); }
-  .btn-devolver { background: var(--verde-soft); color: var(--verde-dark); }
-  .btn-editar { background: var(--amarillo-soft); color: #B8860B; }
-  .btn-eliminar { background: var(--coral-soft); color: var(--coral); }
-  .empty { text-align: center; padding: 60px 20px; color: var(--texto-soft); grid-column: 1 / -1; }
-  .empty .emoji { font-size: 48px; margin-bottom: 12px; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
 
-  /* ══════════════════════════════════════
-     PRÉSTAMOS
-     ══════════════════════════════════════ */
-  .table-wrap { overflow-x: auto; }
-  table.data { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 600px; }
-  table.data th {
-    text-align: left; padding: 12px 16px; font-size: 12px; text-transform: uppercase;
-    letter-spacing: .5px; color: var(--texto-soft); border-bottom: 2px solid var(--borde); background: var(--bg);
+  /* ---------- NAV ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(12,12,13,0.72);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line-soft);
   }
-  table.data td { padding: 14px 16px; border-bottom: 1px solid var(--borde); color: var(--texto); }
-  table.data tbody tr { transition: background .15s; }
-  table.data tbody tr:hover td { background: var(--azul-soft); }
-  .pill { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
-  .pill.activo { background: var(--coral-soft); color: var(--coral); }
-  .pill.devuelto { background: var(--verde-soft); color: var(--verde-dark); }
-  .btn-table {
-    padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700;
-    font-family: inherit; cursor: pointer; background: var(--verde-soft); color: var(--verde-dark); transition: transform .1s;
+  .nav-inner {
+    max-width: var(--maxw); margin: 0 auto; padding: 16px 28px;
+    display: flex; align-items: center; justify-content: space-between;
   }
-  .btn-table:hover { transform: scale(1.05); }
+  .brand { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 600; letter-spacing: -0.01em; }
+  .brand img { width: 34px; height: 34px; }
+  .nav-links { display: flex; gap: 30px; font-size: 0.9rem; color: var(--text-dim); }
+  .nav-links a { transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-toggle { display: none; background: none; border: 0; color: var(--text); font-size: 1.5rem; cursor: pointer; }
 
-  /* ══════════════════════════════════════
-     USUARIOS
-     ══════════════════════════════════════ */
-  .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-  .user-card {
-    background: var(--blanco); border-radius: var(--radius); padding: 20px;
-    box-shadow: 0 2px 12px var(--sombra); display: flex; align-items: center; gap: 16px; transition: transform .2s;
+  /* ---------- HERO ---------- */
+  header { padding: 110px 0 90px; position: relative; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.04em;
+    color: var(--accent-dim); margin-bottom: 28px; display: flex; align-items: center; gap: 10px;
   }
-  .user-card:hover { transform: translateY(-3px); }
-  .user-avatar {
-    width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center;
-    justify-content: center; font-size: 22px; flex-shrink: 0;
+  .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent-dim); display: inline-block; }
+  h1 {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(2.6rem, 7vw, 5rem); line-height: 1.02;
+    letter-spacing: -0.03em; margin-bottom: 28px;
   }
-  .user-avatar.admin { background: var(--coral-soft); }
-  .user-avatar.bibliotecario { background: var(--azul-soft); }
-  .user-avatar.usuario { background: var(--verde-soft); }
-  .user-info h4 { font-size: 15px; font-weight: 700; }
-  .user-info p { font-size: 13px; color: var(--texto-soft); }
-  .user-info .role-tag {
-    display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 6px;
-    font-size: 11px; font-weight: 700;
+  h1 .alt { color: var(--text-faint); }
+  .lead { font-size: clamp(1.05rem, 2vw, 1.3rem); color: var(--text-dim); max-width: 600px; margin-bottom: 40px; }
+  .lead strong { color: var(--text); font-weight: 600; }
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--display); font-weight: 600; font-size: 0.95rem;
+    padding: 13px 26px; border-radius: 4px; transition: all 0.2s; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 9px;
   }
-  .role-tag.admin { background: var(--coral-soft); color: var(--coral); }
-  .role-tag.bibliotecario { background: var(--azul-soft); color: var(--azul); }
-  .role-tag.usuario { background: var(--verde-soft); color: var(--verde-dark); }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: var(--accent-dim); transform: translateY(-2px); }
+  .btn-ghost { border: 1px solid var(--line); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ══════════════════════════════════════
-     MODALES
-     ══════════════════════════════════════ */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 100;
-    align-items: center; justify-content: center; padding: 20px;
+  .status {
+    margin-top: 56px; display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim);
   }
-  .modal-overlay.active { display: flex; }
-  .modal {
-    background: var(--blanco); border-radius: 18px; padding: 28px; width: 440px; max-width: 100%;
-    max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2); animation: modalIn .3s ease;
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 var(--accent); animation: pulse 2.4s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(214,255,63,0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(214,255,63,0); }
+    100% { box-shadow: 0 0 0 0 rgba(214,255,63,0); }
   }
-  @keyframes modalIn { from{opacity:0;transform:translateY(20px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
-  .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: var(--coral); }
-  .modal label {
-    display: block; font-size: 13px; font-weight: 600; color: var(--texto-soft);
-    margin-bottom: 6px; margin-top: 14px;
-  }
-  .modal label:first-of-type { margin-top: 0; }
-  .modal input, .modal select {
-    width: 100%; padding: 11px 14px; border: 2px solid var(--borde); border-radius: 10px;
-    font-size: 15px; font-family: inherit; transition: border-color .2s;
-  }
-  .modal input:focus, .modal select:focus { outline: none; border-color: var(--coral); }
-  .modal-buttons { display: flex; gap: 10px; margin-top: 22px; }
-  .modal-buttons button {
-    flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
-    font-family: inherit; cursor: pointer; transition: transform .15s;
-  }
-  .modal-buttons button:hover { transform: translateY(-2px); }
-  .modal-buttons .btn-save { background: linear-gradient(135deg, var(--coral), var(--naranja)); color: #fff; }
-  .modal-buttons .btn-cancel { background: var(--bg); color: var(--texto-soft); border: 2px solid var(--borde); }
 
-  .toast {
-    position: fixed; bottom: 24px; right: 24px; background: var(--sidebar-bg); color: #fff;
-    padding: 14px 22px; border-radius: 12px; font-size: 14px; font-weight: 600; opacity: 0;
-    transform: translateY(10px); transition: .3s; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,.2);
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 25; }
-  .sidebar-overlay.show { display: block; }
+  /* ---------- SECTION SHELL ---------- */
+  section { padding: 80px 0; border-top: 1px solid var(--line-soft); }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 48px; }
+  .sec-num { font-family: var(--mono); font-size: 0.85rem; color: var(--accent-dim); }
+  .sec-title { font-family: var(--display); font-weight: 600; font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.02em; }
 
-  /* ══════════════════════════════════════
-     RESPONSIVE
-     ══════════════════════════════════════ */
-  @media (max-width: 900px) {
-    .dash-grid { grid-template-columns: 1fr; }
-    .main-content { padding: 20px; }
+  /* ---------- PROJECTS ---------- */
+  .projects { display: grid; gap: 18px; }
+  .project {
+    background: var(--bg-card); border: 1px solid var(--line-soft);
+    border-radius: 8px; padding: 30px; transition: all 0.25s; position: relative; overflow: hidden;
   }
-  @media (max-width: 768px) {
-    .hamburger { display: block; }
-    .sidebar {
-      position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 30;
-      transform: translateX(-100%); transition: transform .28s ease;
-      box-shadow: 4px 0 20px rgba(0,0,0,.15);
-    }
-    .sidebar.open { transform: translateX(0); }
-    .main-content { padding: 18px 16px; max-height: none; }
-    .topbar-user { display: none; }
-    .dash-cards { grid-template-columns: 1fr 1fr; }
-    .grid { grid-template-columns: 1fr; }
-    .card { flex-direction: row; }
-    .card-cover { width: 90px; min-height: 140px; }
+  .project::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--accent); transform: scaleY(0); transform-origin: top; transition: transform 0.25s;
   }
-  @media (max-width: 480px) {
-    .dash-cards { grid-template-columns: 1fr; }
-    .login-card { padding: 32px 24px; }
+  .project:hover { border-color: var(--line); transform: translateX(4px); }
+  .project:hover::before { transform: scaleY(1); }
+  .proj-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 14px; }
+  .proj-name { font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: -0.01em; }
+  .proj-tag { font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); border: 1px solid var(--line); padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
+  .proj-desc { color: var(--text-dim); font-size: 0.97rem; margin-bottom: 20px; max-width: 70ch; }
+  .proj-foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+  .proj-stack { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-family: var(--mono); font-size: 0.74rem; color: var(--text-dim); background: var(--bg-soft); border: 1px solid var(--line-soft); padding: 4px 10px; border-radius: 4px; }
+  .proj-links { display: flex; gap: 18px; font-size: 0.85rem; font-family: var(--display); font-weight: 500; }
+  .proj-links a { color: var(--text-dim); transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+  .proj-links a:hover { color: var(--accent); }
+
+  /* ---------- STACK ---------- */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .stack-col h3 { font-family: var(--mono); font-size: 0.8rem; color: var(--accent-dim); margin-bottom: 16px; letter-spacing: 0.03em; text-transform: uppercase; }
+  .stack-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .stack-col li { color: var(--text-dim); font-size: 0.97rem; display: flex; align-items: center; gap: 10px; }
+  .stack-col li::before { content: ''; width: 5px; height: 5px; background: var(--text-faint); border-radius: 50%; flex-shrink: 0; }
+
+  /* ---------- ABOUT ---------- */
+  .about-text { font-size: clamp(1.1rem, 2.2vw, 1.45rem); line-height: 1.55; max-width: 760px; font-family: var(--display); font-weight: 400; letter-spacing: -0.01em; }
+  .about-text .hi { color: var(--accent); }
+  .about-meta { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 36px; }
+  .meta-item .k { font-family: var(--mono); font-size: 0.74rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .meta-item .v { font-size: 0.98rem; color: var(--text); }
+
+  /* ---------- CONTACT ---------- */
+  .contact-card { text-align: center; padding: 20px 0; }
+  .contact-card h2 { font-family: var(--display); font-weight: 700; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -0.03em; margin-bottom: 22px; }
+  .contact-card h2 a { border-bottom: 2px solid transparent; transition: border-color 0.2s; }
+  .contact-card h2 a:hover { border-color: var(--accent); }
+  .contact-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 36px; }
+
+  /* ---------- FOOTER ---------- */
+  footer { padding: 40px 0; border-top: 1px solid var(--line-soft); }
+  .foot-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+  .foot-inner p { font-family: var(--mono); font-size: 0.8rem; color: var(--text-faint); }
+  .foot-inner .brand { font-size: 0.95rem; }
+
+  /* ---------- REVEAL ANIM ---------- */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+    .nav-links.open { display: flex; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--bg-soft); border-bottom: 1px solid var(--line); padding: 8px 28px 20px; }
+    .nav-links.open a { padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+    .nav-toggle { display: block; }
+    header { padding: 70px 0 60px; }
+    .proj-top { flex-direction: column; }
+    section { padding: 60px 0; }
+    h1 { line-height: 1.12; letter-spacing: -0.02em; }
+    .about-text { line-height: 1.4; }
+    .contact-card h2 { line-height: 1.12; }
+  }
+
+  @media (max-width: 420px) {
+    h1 { font-size: 2.3rem; line-height: 1.14; }
   }
 </style>
 </head>
 <body>
 
-<!-- ════════════════════════════════════════
-     PANTALLA: LOGIN
-     ════════════════════════════════════════ -->
-<div id="loginScreen" class="screen active">
-  <div class="login-card">
-    <div class="login-brand">
-      <div class="icon">📚</div>
-      <h1>Biblioteca Duoc</h1>
-      <p>Sistema de gestión bibliotecaria</p>
-    </div>
-    <div class="field">
-      <label>Usuario</label>
-      <input id="loginUser" placeholder="Ingresa tu usuario">
-    </div>
-    <div class="field">
-      <label>Contraseña</label>
-      <input id="loginPass" type="password" placeholder="Ingresa tu contraseña">
-    </div>
-    <button class="login-btn" onclick="login()">Iniciar sesión</button>
-    <div class="login-error" id="loginError">Usuario o contraseña incorrectos.</div>
-    <div class="login-hint">
-      <b>Credenciales de prueba:</b>
-      <span class="hint-role">admin</span> / 1234 → Administrador<br>
-      <span class="hint-role">biblio</span> / 1234 → Bibliotecario<br>
-      <span class="hint-role">usuario</span> / 1234 → Usuario
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="brand"><img src="logo_LA.svg" alt="Logo Lukas Ávila" /> Lukas Ávila</a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">≡</button>
+    <div class="nav-links" id="navlinks">
+      <a href="#proyectos">Proyectos</a>
+      <a href="#stack">Stack</a>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#contacto">Contacto</a>
     </div>
   </div>
-</div>
+</nav>
 
-<!-- ════════════════════════════════════════
-     PANTALLA: APP
-     ════════════════════════════════════════ -->
-<div id="appScreen" class="screen">
-  <div class="topbar">
-    <div class="topbar-left">
-      <button class="hamburger" onclick="toggleSidebar()">☰</button>
-      <div class="topbar-title">📚 Biblioteca Duoc</div>
+<div id="top"></div>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow reveal">Desarrollador · Renca, Santiago</p>
+    <h1 class="reveal">Construyo software<br />de principio<br /><span class="alt">a fin.</span></h1>
+    <p class="lead reveal">Desarrollador enfocado en <strong>backend con Java y Spring Boot</strong> y <strong>frontend con React</strong>. Estudiante de Ingeniería en Informática en Duoc UC, con experiencia construyendo desde microservicios hasta videojuegos.</p>
+    <div class="cta-row reveal">
+      <a href="#proyectos" class="btn btn-primary">Ver proyectos →</a>
+      <a href="CV_Lukas_Avila_2026.pdf" download class="btn btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar CV
+      </a>
+      <a href="https://github.com/LukasAvilaPonce" target="_blank" rel="noopener" class="btn btn-ghost">GitHub</a>
     </div>
-    <div class="topbar-right">
-      <span class="topbar-user" id="topUser"></span>
-      <span class="topbar-role" id="topRole"></span>
-      <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
-    </div>
+    <div class="status reveal"><span class="dot"></span> Disponible para proyectos freelance</div>
   </div>
-  <div class="app-body">
-    <nav class="sidebar" id="sidebar"></nav>
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <main class="main-content">
+</header>
 
-      <!-- DASHBOARD -->
-      <section class="page active" id="pageDashboard">
-        <h2 class="page-title">Dashboard</h2>
-        <p class="page-sub">Resumen general de la biblioteca.</p>
-        <div class="dash-cards">
-          <div class="dash-card c-azul"><div class="dc-icon">📖</div><div class="dc-val" id="dTotal">0</div><div class="dc-lbl">Total de libros</div></div>
-          <div class="dash-card c-verde"><div class="dc-icon">✅</div><div class="dc-val" id="dDisp">0</div><div class="dc-lbl">Disponibles</div></div>
-          <div class="dash-card c-coral"><div class="dc-icon">📤</div><div class="dc-val" id="dPrest">0</div><div class="dc-lbl">Prestados</div></div>
-          <div class="dash-card c-morado"><div class="dc-icon">📁</div><div class="dc-val" id="dGeneros">0</div><div class="dc-lbl">Géneros</div></div>
-        </div>
-        <div class="dash-grid">
-          <div class="panel"><h3>📊 Libros por género</h3><div id="genreCharts"></div></div>
-          <div class="panel"><h3>🕐 Actividad reciente</h3><div id="activityList"></div></div>
-        </div>
-      </section>
+<section id="proyectos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">Proyectos</h2>
+    </div>
+    <div class="projects">
 
-      <!-- CATÁLOGO -->
-      <section class="page" id="pageCatalogo">
-        <h2 class="page-title">Catálogo de libros</h2>
-        <p class="page-sub">Explora el inventario completo de la biblioteca.</p>
-        <div class="toolbar">
-          <div class="search-box">
-            <span class="icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Buscar por título o autor...">
+      <article class="project reveal">
+        <div class="proj-top">
+          <h3 class="proj-name">SIVEBO</h3>
+          <span class="proj-tag">Microservicios</span>
+        </div>
+        <p class="proj-desc">Sistema distribuido de 14 microservicios en Spring Boot para gestión de envíos y bodega. Incluye descubrimiento de servicios con Eureka, API Gateway, comunicación entre servicios con WebClient, y orquestación completa con Docker Compose. Responsable de los módulos de finanzas, embalaje y paquetes.</p>
+        <div class="proj-foot">
+          <div class="proj-stack">
+            <span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">Spring Cloud</span><span class="chip">MariaDB</span><span class="chip">Docker</span>
           </div>
-          <select class="filter-select" id="filterEstado">
-            <option value="todos">Todos</option>
-            <option value="disponible">Disponibles</option>
-            <option value="prestado">Prestados</option>
-          </select>
-          <select class="filter-select" id="filterGenero">
-            <option value="todos">Todos los géneros</option>
-          </select>
-          <button class="btn-add" id="btnAgregar" onclick="abrirModal()" style="display:none">+ Agregar libro</button>
-        </div>
-        <div class="grid" id="grid"></div>
-      </section>
-
-      <!-- PRÉSTAMOS -->
-      <section class="page" id="pagePrestamos">
-        <h2 class="page-title">Historial de préstamos</h2>
-        <p class="page-sub">Registro de todos los préstamos y devoluciones.</p>
-        <div class="panel">
-          <div class="table-wrap">
-            <table class="data" id="tablaPrestamos">
-              <thead><tr><th>Libro</th><th>Prestatario</th><th>Fecha préstamo</th><th>Estado</th><th>Acción</th></tr></thead>
-              <tbody></tbody>
-            </table>
+          <div class="proj-links">
+            <a href="https://github.com/orgs/SIVEBO/repositories" target="_blank" rel="noopener">Código ↗</a>
           </div>
         </div>
-      </section>
+      </article>
 
-      <!-- USUARIOS -->
-      <section class="page" id="pageUsuarios">
-        <h2 class="page-title">Usuarios del sistema</h2>
-        <p class="page-sub">Usuarios registrados en la plataforma.</p>
-        <div class="user-grid" id="userGrid"></div>
-      </section>
+      <article class="project reveal">
+        <div class="proj-top">
+          <h3 class="proj-name">On Tour</h3>
+          <span class="proj-tag">Web App</span>
+        </div>
+        <p class="proj-desc">Prototipo de plataforma web para una agencia de viajes, con acceso diferenciado por roles (Apoderado, Ejecutivo, Gerencia), dashboard con estadísticas animadas, tema oscuro y despliegue automático mediante GitHub Actions.</p>
+        <div class="proj-foot">
+          <div class="proj-stack">
+            <span class="chip">React</span><span class="chip">Vite</span><span class="chip">JavaScript</span><span class="chip">CSS</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://lukasavilaponce.github.io/On_Tour_Prototipo/" target="_blank" rel="noopener">Demo ↗</a>
+            <a href="https://github.com/LukasAvilaPonce/On_Tour_Prototipo" target="_blank" rel="noopener">Código ↗</a>
+          </div>
+        </div>
+      </article>
 
-    </main>
-  </div>
-</div>
+      <article class="project reveal">
+        <div class="proj-top">
+          <h3 class="proj-name">LastHarvest</h3>
+          <span class="proj-tag">Videojuego</span>
+        </div>
+        <p class="proj-desc">Juego de supervivencia por oleadas en 3D que mezcla tower defense y acción. El jugador planta aliados con habilidades distintas para defender la Planta Madre de hordas de zombies, con IA enemiga basada en distancia y priorización de objetivos.</p>
+        <div class="proj-foot">
+          <div class="proj-stack">
+            <span class="chip">Godot 4</span><span class="chip">GDScript</span><span class="chip">Mixamo</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/LukasAvilaPonce/LastHarvest" target="_blank" rel="noopener">Código ↗</a>
+          </div>
+        </div>
+      </article>
 
-<!-- Modal: agregar / editar -->
-<div class="modal-overlay" id="modalOverlay" onclick="cerrarModalFondo(event)">
-  <div class="modal">
-    <h3 id="modalTitle">Agregar libro</h3>
-    <label for="mTitulo">Título</label>
-    <input id="mTitulo" placeholder="Ej: Cien años de soledad">
-    <label for="mAutor">Autor</label>
-    <input id="mAutor" placeholder="Ej: Gabriel García Márquez">
-    <label for="mGenero">Género</label>
-    <input id="mGenero" placeholder="Ej: Novela, Ciencia Ficción...">
-    <label for="mAnio">Año de publicación</label>
-    <input id="mAnio" type="number" placeholder="Ej: 1967">
-    <div class="modal-buttons">
-      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn-save" onclick="guardarLibro()">Guardar</button>
+      <article class="project reveal">
+        <div class="proj-top">
+          <h3 class="proj-name">Biblioteca Duoc</h3>
+          <span class="proj-tag">Web App</span>
+        </div>
+        <p class="proj-desc">Sistema de gestión de biblioteca que funciona 100% en el navegador: catálogo de libros, préstamos y devoluciones, búsqueda en vivo, filtros por estado y género, y datos persistentes con localStorage.</p>
+        <div class="proj-foot">
+          <div class="proj-stack">
+            <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JavaScript</span><span class="chip">localStorage</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://lukasavilaponce.github.io/Biblioteca_Duoc/" target="_blank" rel="noopener">Demo ↗</a>
+            <a href="https://github.com/LukasAvilaPonce/Biblioteca_Duoc" target="_blank" rel="noopener">Código ↗</a>
+          </div>
+        </div>
+      </article>
+
     </div>
   </div>
-</div>
+</section>
 
-<!-- Modal: prestar -->
-<div class="modal-overlay" id="prestarOverlay" onclick="cerrarModalFondo(event)">
-  <div class="modal">
-    <h3>📖 Prestar libro</h3>
-    <label for="mPrestatario">¿A quién se lo prestas?</label>
-    <input id="mPrestatario" placeholder="Nombre completo">
-    <input type="hidden" id="mPrestarId">
-    <div class="modal-buttons">
-      <button class="btn-cancel" onclick="cerrarPrestar()">Cancelar</button>
-      <button class="btn-save" onclick="confirmarPrestamo()">Confirmar préstamo</button>
+<section id="stack">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">Stack</h2>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-col reveal">
+        <h3>Backend</h3>
+        <ul>
+          <li>Java</li><li>Spring Boot</li><li>Spring Cloud</li><li>Microservicios</li><li>MariaDB / SQL</li>
+        </ul>
+      </div>
+      <div class="stack-col reveal">
+        <h3>Frontend</h3>
+        <ul>
+          <li>React</li><li>Vite</li><li>JavaScript</li><li>HTML / CSS</li>
+        </ul>
+      </div>
+      <div class="stack-col reveal">
+        <h3>Otros</h3>
+        <ul>
+          <li>Python</li><li>Oracle SQL</li><li>Godot 4 / GDScript</li><li>Git / GitHub</li><li>Docker</li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="toast" id="toast"></div>
+<section id="sobre-mi">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">Sobre mí</h2>
+    </div>
+    <p class="about-text reveal"><span class="hi">Estudiante de Ingeniería en Informática</span> en Duoc UC. Antes de programar trabajé en infraestructura de redes y en atención al cliente, así que entiendo el lado técnico y el del usuario. Hoy me muevo cómodo entre el backend y el frontend, y aprendo rápido por mi cuenta: he construido desde sistemas de microservicios hasta videojuegos.</p>
+    <div class="about-meta reveal">
+      <div class="meta-item"><div class="k">Ubicación</div><div class="v">Renca, Santiago · Chile</div></div>
+      <div class="meta-item"><div class="k">Estudios</div><div class="v">Ing. en Informática · Duoc UC</div></div>
+      <div class="meta-item"><div class="k">Disponibilidad</div><div class="v">Freelance / Remoto</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contacto">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <span class="sec-num">04 — Contacto</span>
+      <h2 style="margin-top:18px;">Hablemos de tu<br />proyecto.</h2>
+      <p class="lead" style="margin: 0 auto;">¿Necesitas una web, un backend o una mano con código? Escríbeme.</p>
+      <div class="contact-links">
+        <a href="https://wa.me/56996571578?text=Hola%20Lukas%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20conversar%20sobre%20un%20proyecto." target="_blank" rel="noopener" class="btn btn-primary">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01c-1.52 0-3.01-.41-4.31-1.18l-.31-.18-3.2.84.85-3.12-.2-.32a8.23 8.23 0 0 1-1.26-4.36c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.51-8.24 8.51zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42-.14-.01-.31-.01-.48-.01-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>
+          WhatsApp
+        </a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=lukas.avila2002@gmail.com&su=Contacto%20desde%20tu%20portafolio" target="_blank" rel="noopener" class="btn btn-ghost">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12.713 1.05 5.213A2 2 0 0 1 3 4h18a2 2 0 0 1 1.95 1.213L12 12.713zM12 14.4 1 7v11a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V7l-11 7.4z"/></svg>
+          Enviar correo
+        </a>
+        <a href="https://github.com/LukasAvilaPonce" target="_blank" rel="noopener" class="btn btn-ghost">GitHub</a>
+        <a href="CV_Lukas_Avila_2026.pdf" download class="btn btn-ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar CV
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <a href="#top" class="brand"><img src="logo_LA.svg" alt="" style="width:24px;height:24px;" /> Lukas Ávila</a>
+    <p>© 2026 — Hecho con HTML & CSS</p>
+  </div>
+</footer>
 
 <script>
-  /* ══════════════════════════════════════
-     DATOS
-     ══════════════════════════════════════ */
-  const LIBROS_EJEMPLO = [
-    { id:1,  titulo:"Cien años de soledad",         autor:"Gabriel García Márquez",    genero:"Novela",           anio:1967, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780060883287-M.jpg" },
-    { id:2,  titulo:"1984",                          autor:"George Orwell",             genero:"Ciencia Ficción",  anio:1949, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780451524935-M.jpg" },
-    { id:3,  titulo:"Don Quijote de la Mancha",      autor:"Miguel de Cervantes",       genero:"Clásico",          anio:1605, estado:"prestado",   prestatario:"Carlos Díaz",  fechaPrestamo:"2026-06-20", cover:"https://covers.openlibrary.org/b/isbn/9788420412146-M.jpg" },
-    { id:4,  titulo:"El Principito",                 autor:"Antoine de Saint-Exupéry",  genero:"Infantil",         anio:1943, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg" },
-    { id:5,  titulo:"Breve historia del tiempo",     autor:"Stephen Hawking",           genero:"Ciencia",          anio:1988, estado:"prestado",   prestatario:"Ana Morales",  fechaPrestamo:"2026-06-15", cover:"https://covers.openlibrary.org/b/isbn/9780553380163-M.jpg" },
-    { id:6,  titulo:"La casa de los espíritus",      autor:"Isabel Allende",            genero:"Novela",           anio:1982, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780553383805-M.jpg" },
-    { id:7,  titulo:"Fahrenheit 451",                autor:"Ray Bradbury",              genero:"Ciencia Ficción",  anio:1953, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9781451673319-M.jpg" },
-    { id:8,  titulo:"Orgullo y prejuicio",           autor:"Jane Austen",               genero:"Clásico",          anio:1813, estado:"prestado",   prestatario:"María López",  fechaPrestamo:"2026-06-18", cover:"https://covers.openlibrary.org/b/isbn/9780141439518-M.jpg" },
-    { id:9,  titulo:"El código Da Vinci",            autor:"Dan Brown",                 genero:"Misterio",         anio:2003, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780307474278-M.jpg" },
-    { id:10, titulo:"Sapiens",                       autor:"Yuval Noah Harari",         genero:"Historia",         anio:2011, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg" },
-    { id:11, titulo:"Harry Potter y la piedra filosofal", autor:"J.K. Rowling",          genero:"Fantasía",         anio:1997, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780747532699-M.jpg" },
-    { id:12, titulo:"Rayuela",                       autor:"Julio Cortázar",            genero:"Novela",           anio:1963, estado:"prestado",   prestatario:"Pedro Soto",   fechaPrestamo:"2026-06-22", cover:"https://covers.openlibrary.org/b/isbn/9788437604572-M.jpg" }
-  ];
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (Math.min(i, 4) * 0.06) + 's';
+    io.observe(el);
+  });
 
-  const HISTORIAL_EJEMPLO = [
-    { libroId:3,  libro:"Don Quijote de la Mancha",  prestatario:"Carlos Díaz",   fecha:"2026-06-20", estado:"activo" },
-    { libroId:5,  libro:"Breve historia del tiempo", prestatario:"Ana Morales",   fecha:"2026-06-15", estado:"activo" },
-    { libroId:8,  libro:"Orgullo y prejuicio",       prestatario:"María López",   fecha:"2026-06-18", estado:"activo" },
-    { libroId:12, libro:"Rayuela",                   prestatario:"Pedro Soto",    fecha:"2026-06-22", estado:"activo" },
-    { libroId:1,  libro:"Cien años de soledad",      prestatario:"Luis Fernández",fecha:"2026-06-01", devolucion:"2026-06-10", estado:"devuelto" },
-    { libroId:2,  libro:"1984",                      prestatario:"Sofía Reyes",   fecha:"2026-05-20", devolucion:"2026-06-05", estado:"devuelto" },
-    { libroId:9,  libro:"El código Da Vinci",        prestatario:"Tomás Herrera", fecha:"2026-05-15", devolucion:"2026-05-30", estado:"devuelto" }
-  ];
-
-  const USUARIOS = [
-    { nombre:"Lukas Ávila",     usuario:"admin",   rol:"admin",         email:"admin@biblioteca.duoc.cl" },
-    { nombre:"Camila Torres",   usuario:"biblio",  rol:"bibliotecario", email:"c.torres@biblioteca.duoc.cl" },
-    { nombre:"Diego Muñoz",     usuario:"usuario", rol:"usuario",       email:"d.munoz@biblioteca.duoc.cl" },
-    { nombre:"Valentina Rojas", usuario:"val.rojas",rol:"admin",        email:"v.rojas@biblioteca.duoc.cl" }
-  ];
-
-  const CUENTAS = {
-    admin:   { nombre:"Lukas Ávila",   rol:"admin",         rolLabel:"Administrador" },
-    biblio:  { nombre:"Camila Torres", rol:"bibliotecario", rolLabel:"Bibliotecario" },
-    usuario: { nombre:"Diego Muñoz",   rol:"usuario",       rolLabel:"Usuario" }
-  };
-
-  const COLORES_GENERO = ['var(--coral)','var(--azul)','var(--verde)','var(--morado)','var(--naranja)','var(--amarillo)','#4ECDC4','#E056A0'];
-
-  /* ══════════════════════════════════════
-     ESTADO
-     ══════════════════════════════════════ */
-  let libros = [];
-  let historial = [];
-  let editandoId = null;
-  let rolActual = '';
-
-  /* ══════════════════════════════════════
-     LOGIN / LOGOUT
-     ══════════════════════════════════════ */
-  function login() {
-    const user = document.getElementById('loginUser').value.trim().toLowerCase();
-    const pass = document.getElementById('loginPass').value;
-    const errEl = document.getElementById('loginError');
-    const cuenta = CUENTAS[user];
-
-    if (!cuenta || pass !== '1234') {
-      errEl.style.display = 'block';
-      errEl.style.animation = 'none'; void errEl.offsetWidth; errEl.style.animation = 'shake .4s';
-      return;
-    }
-
-    errEl.style.display = 'none';
-    rolActual = cuenta.rol;
-
-    document.getElementById('topUser').textContent = cuenta.nombre;
-    const roleEl = document.getElementById('topRole');
-    roleEl.textContent = cuenta.rolLabel;
-    roleEl.className = 'topbar-role ' + cuenta.rol;
-
-    // Mostrar/ocultar botón agregar según rol
-    document.getElementById('btnAgregar').style.display =
-      (rolActual === 'admin' || rolActual === 'bibliotecario') ? '' : 'none';
-
-    cargarDatos();
-    buildNav(rolActual);
-    document.getElementById('loginScreen').classList.remove('active');
-    document.getElementById('appScreen').classList.add('active');
-    toast('Bienvenido/a, ' + cuenta.nombre);
-  }
-
-  function logout() {
-    document.getElementById('appScreen').classList.remove('active');
-    document.getElementById('loginScreen').classList.add('active');
-    document.getElementById('loginUser').value = '';
-    document.getElementById('loginPass').value = '';
-  }
-
-  document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-  document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-
-  /* ══════════════════════════════════════
-     NAVEGACIÓN
-     ══════════════════════════════════════ */
-  const NAV = {
-    admin: [
-      { sep:"Principal" },
-      { id:"pageDashboard", ic:"📊", label:"Dashboard" },
-      { id:"pageCatalogo",  ic:"📖", label:"Catálogo" },
-      { id:"pagePrestamos", ic:"📋", label:"Préstamos" },
-      { sep:"Administración" },
-      { id:"pageUsuarios",  ic:"👥", label:"Usuarios" }
-    ],
-    bibliotecario: [
-      { sep:"Principal" },
-      { id:"pageDashboard", ic:"📊", label:"Dashboard" },
-      { id:"pageCatalogo",  ic:"📖", label:"Catálogo" },
-      { id:"pagePrestamos", ic:"📋", label:"Préstamos" }
-    ],
-    usuario: [
-      { sep:"Biblioteca" },
-      { id:"pageCatalogo", ic:"📖", label:"Catálogo" }
-    ]
-  };
-
-  function buildNav(role) {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.innerHTML = '';
-    let first = null;
-    NAV[role].forEach(item => {
-      if (item.sep) {
-        const s = document.createElement('div'); s.className = 'nav-sep'; s.textContent = item.sep;
-        sidebar.appendChild(s); return;
-      }
-      const d = document.createElement('div'); d.className = 'nav-item'; d.dataset.target = item.id;
-      d.innerHTML = '<span class="ic">' + item.ic + '</span>' + item.label;
-      d.onclick = () => navegar(item.id);
-      sidebar.appendChild(d);
-      if (!first) first = item.id;
-    });
-    navegar(first);
-  }
-
-  function navegar(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.target === id));
-    if (window.innerWidth <= 768) closeSidebar();
-    if (id === 'pageDashboard') renderDashboard();
-    if (id === 'pageCatalogo') renderCatalogo();
-    if (id === 'pagePrestamos') renderPrestamos();
-    if (id === 'pageUsuarios') renderUsuarios();
-  }
-
-  function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('show');
-  }
-  function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').classList.remove('show');
-  }
-
-  /* ══════════════════════════════════════
-     DATOS (localStorage)
-     ══════════════════════════════════════ */
-  function cargarDatos() {
-    const gl = localStorage.getItem('bduoc_libros');
-    const gh = localStorage.getItem('bduoc_historial');
-    libros = gl ? JSON.parse(gl) : JSON.parse(JSON.stringify(LIBROS_EJEMPLO));
-    historial = gh ? JSON.parse(gh) : JSON.parse(JSON.stringify(HISTORIAL_EJEMPLO));
-    if (!gl || !gh) guardarDatos();
-  }
-
-  function guardarDatos() {
-    localStorage.setItem('bduoc_libros', JSON.stringify(libros));
-    localStorage.setItem('bduoc_historial', JSON.stringify(historial));
-  }
-
-  function siguienteId() { return libros.length === 0 ? 1 : Math.max(...libros.map(l => l.id)) + 1; }
-  function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-
-  function puedeEditar() { return rolActual === 'admin' || rolActual === 'bibliotecario'; }
-
-  /* ══════════════════════════════════════
-     DASHBOARD
-     ══════════════════════════════════════ */
-  function renderDashboard() {
-    const total = libros.length;
-    const disp = libros.filter(l => l.estado === 'disponible').length;
-    const prest = libros.filter(l => l.estado === 'prestado').length;
-    const generos = [...new Set(libros.map(l => l.genero))];
-    document.getElementById('dTotal').textContent = total;
-    document.getElementById('dDisp').textContent = disp;
-    document.getElementById('dPrest').textContent = prest;
-    document.getElementById('dGeneros').textContent = generos.length;
-
-    const conteo = {};
-    libros.forEach(l => { conteo[l.genero] = (conteo[l.genero] || 0) + 1; });
-    const sorted = Object.entries(conteo).sort((a, b) => b[1] - a[1]);
-    document.getElementById('genreCharts').innerHTML = sorted.map(([gen, cant], i) => {
-      const pct = Math.round((cant / total) * 100);
-      const color = COLORES_GENERO[i % COLORES_GENERO.length];
-      return '<div class="genre-bar"><div class="gb-label"><span>' + esc(gen) + '</span><span>' + cant + ' libro' + (cant > 1 ? 's' : '') + ' (' + pct + '%)</span></div><div class="gb-track"><div class="gb-fill" style="width:' + pct + '%;background:' + color + '"></div></div></div>';
-    }).join('');
-
-    const recientes = historial.slice(0, 6);
-    document.getElementById('activityList').innerHTML = recientes.length
-      ? recientes.map(h => {
-          const act = h.estado === 'activo';
-          return '<div class="activity-item"><div class="ai-icon ' + (act ? 'prestamo' : 'devolucion') + '">' + (act ? '📤' : '↩️') + '</div><div class="ai-text"><b>' + esc(h.prestatario) + '</b> ' + (act ? 'tomó prestado' : 'devolvió') + ' <b>' + esc(h.libro) + '</b></div><div class="ai-date">' + (act ? h.fecha : h.devolucion) + '</div></div>';
-        }).join('')
-      : '<p style="color:var(--texto-soft);font-size:14px;padding:20px 0;text-align:center">Sin actividad</p>';
-
-    setTimeout(() => {
-      document.querySelectorAll('#genreCharts .gb-fill').forEach(bar => {
-        const w = bar.style.width; bar.style.width = '0';
-        requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = w; }));
-      });
-    }, 50);
-  }
-
-  /* ══════════════════════════════════════
-     CATÁLOGO
-     ══════════════════════════════════════ */
-  function renderCatalogo() {
-    actualizarGeneros();
-    const filtrados = filtrar();
-    const grid = document.getElementById('grid');
-    const editar_ = puedeEditar();
-
-    if (filtrados.length === 0) {
-      grid.innerHTML = '<div class="empty"><div class="emoji">📭</div><p>No se encontraron libros</p></div>';
-      return;
-    }
-
-    grid.innerHTML = filtrados.map(libro => {
-      const esPrestado = libro.estado === 'prestado';
-      const coverHtml = libro.cover
-        ? '<img src="' + esc(libro.cover) + '" alt="' + esc(libro.titulo) + '" onerror="this.parentElement.innerHTML=\'<div class=cover-placeholder>📖</div>\'">'
-        : '<div class="cover-placeholder">📖</div>';
-
-      let acciones = '';
-      if (editar_) {
-        acciones = esPrestado
-          ? '<button class="btn-devolver" onclick="devolver(' + libro.id + ')">↩ Devolver</button>'
-          : '<button class="btn-prestar" onclick="abrirPrestar(' + libro.id + ')">📖 Prestar</button>';
-        acciones += '<button class="btn-editar" onclick="editar(' + libro.id + ')">✏️ Editar</button>';
-        acciones += '<button class="btn-eliminar" onclick="eliminar(' + libro.id + ')">🗑️ Eliminar</button>';
-      }
-
-      return '<div class="card">' +
-        '<div class="card-cover">' + coverHtml + '</div>' +
-        '<div class="card-body">' +
-          '<div class="card-header"><div class="card-title">' + esc(libro.titulo) + '</div><span class="card-badge ' + libro.estado + '">' + (esPrestado ? 'Prestado' : 'Disponible') + '</span></div>' +
-          '<div class="card-info"><span>✍️ ' + esc(libro.autor) + '</span><span>📁 ' + esc(libro.genero) + ' · 📅 ' + libro.anio + '</span></div>' +
-          (esPrestado ? '<div class="card-prestamo">👤 ' + esc(libro.prestatario) + ' · desde ' + libro.fechaPrestamo + '</div>' : '') +
-          (acciones ? '<div class="card-actions">' + acciones + '</div>' : '') +
-        '</div></div>';
-    }).join('');
-  }
-
-  function filtrar() {
-    const busqueda = document.getElementById('searchInput').value.toLowerCase();
-    const estado = document.getElementById('filterEstado').value;
-    const genero = document.getElementById('filterGenero').value;
-    return libros.filter(l => {
-      return (l.titulo.toLowerCase().includes(busqueda) || l.autor.toLowerCase().includes(busqueda))
-        && (estado === 'todos' || l.estado === estado)
-        && (genero === 'todos' || l.genero === genero);
-    });
-  }
-
-  function actualizarGeneros() {
-    const select = document.getElementById('filterGenero');
-    const generos = [...new Set(libros.map(l => l.genero).filter(Boolean))].sort();
-    const val = select.value;
-    select.innerHTML = '<option value="todos">Todos los géneros</option>';
-    generos.forEach(g => { select.innerHTML += '<option value="' + esc(g) + '">' + esc(g) + '</option>'; });
-    select.value = val;
-  }
-
-  document.getElementById('searchInput').addEventListener('input', renderCatalogo);
-  document.getElementById('filterEstado').addEventListener('change', renderCatalogo);
-  document.getElementById('filterGenero').addEventListener('change', renderCatalogo);
-
-  /* ══════════════════════════════════════
-     CRUD
-     ══════════════════════════════════════ */
-  function abrirModal(id) {
-    editandoId = id || null;
-    document.getElementById('modalTitle').textContent = id ? 'Editar libro' : 'Agregar libro';
-    if (id) {
-      const l = libros.find(x => x.id === id);
-      document.getElementById('mTitulo').value = l.titulo;
-      document.getElementById('mAutor').value = l.autor;
-      document.getElementById('mGenero').value = l.genero;
-      document.getElementById('mAnio').value = l.anio;
-    } else {
-      ['mTitulo','mAutor','mGenero','mAnio'].forEach(x => document.getElementById(x).value = '');
-    }
-    document.getElementById('modalOverlay').classList.add('active');
-    document.getElementById('mTitulo').focus();
-  }
-
-  function cerrarModal() { document.getElementById('modalOverlay').classList.remove('active'); editandoId = null; }
-
-  function guardarLibro() {
-    const titulo = document.getElementById('mTitulo').value.trim();
-    const autor = document.getElementById('mAutor').value.trim();
-    const genero = document.getElementById('mGenero').value.trim();
-    const anio = parseInt(document.getElementById('mAnio').value);
-    if (!titulo || !autor || !genero || isNaN(anio)) { alert('Completa todos los campos.'); return; }
-
-    if (editandoId) {
-      const l = libros.find(x => x.id === editandoId);
-      l.titulo = titulo; l.autor = autor; l.genero = genero; l.anio = anio;
-      toast('Libro actualizado');
-    } else {
-      libros.push({ id: siguienteId(), titulo, autor, genero, anio, estado:'disponible', prestatario:'', fechaPrestamo:'', cover:'' });
-      toast('Libro agregado al catálogo');
-    }
-    guardarDatos(); renderCatalogo(); cerrarModal();
-  }
-
-  function editar(id) { abrirModal(id); }
-
-  function eliminar(id) {
-    const l = libros.find(x => x.id === id);
-    if (!confirm('¿Eliminar "' + l.titulo + '"?')) return;
-    libros = libros.filter(x => x.id !== id);
-    guardarDatos(); renderCatalogo(); toast('Libro eliminado');
-  }
-
-  /* ══════════════════════════════════════
-     PRÉSTAMOS
-     ══════════════════════════════════════ */
-  function abrirPrestar(id) {
-    document.getElementById('mPrestarId').value = id;
-    document.getElementById('mPrestatario').value = '';
-    document.getElementById('prestarOverlay').classList.add('active');
-    document.getElementById('mPrestatario').focus();
-  }
-  function cerrarPrestar() { document.getElementById('prestarOverlay').classList.remove('active'); }
-
-  function confirmarPrestamo() {
-    const nombre = document.getElementById('mPrestatario').value.trim();
-    if (!nombre) { alert('Ingresa el nombre.'); return; }
-    const id = parseInt(document.getElementById('mPrestarId').value);
-    const libro = libros.find(l => l.id === id);
-    const fecha = new Date().toISOString().slice(0, 10);
-    libro.estado = 'prestado'; libro.prestatario = nombre; libro.fechaPrestamo = fecha;
-    historial.unshift({ libroId: id, libro: libro.titulo, prestatario: nombre, fecha, estado: 'activo' });
-    guardarDatos(); renderCatalogo(); cerrarPrestar();
-    toast('"' + libro.titulo + '" prestado a ' + nombre);
-  }
-
-  function devolver(id) {
-    const libro = libros.find(l => l.id === id);
-    const fecha = new Date().toISOString().slice(0, 10);
-    const reg = historial.find(h => h.libroId === id && h.estado === 'activo');
-    if (reg) { reg.estado = 'devuelto'; reg.devolucion = fecha; }
-    libro.estado = 'disponible'; libro.prestatario = ''; libro.fechaPrestamo = '';
-    guardarDatos(); renderCatalogo();
-    toast('"' + libro.titulo + '" devuelto');
-  }
-
-  function devolverDesdeTabla(libroId) { devolver(libroId); renderPrestamos(); }
-
-  /* ══════════════════════════════════════
-     TABLA PRÉSTAMOS
-     ══════════════════════════════════════ */
-  function renderPrestamos() {
-    const tbody = document.querySelector('#tablaPrestamos tbody');
-    const editar_ = puedeEditar();
-    if (historial.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--texto-soft)">Sin préstamos registrados</td></tr>';
-      return;
-    }
-    tbody.innerHTML = historial.map(h => {
-      const act = h.estado === 'activo';
-      const accion = act && editar_
-        ? '<button class="btn-table" onclick="devolverDesdeTabla(' + h.libroId + ')">↩ Devolver</button>'
-        : (act ? '<span class="pill activo">Activo</span>' : '<span style="font-size:12px;color:var(--texto-light)">' + h.devolucion + '</span>');
-      return '<tr><td><b>' + esc(h.libro) + '</b></td><td>' + esc(h.prestatario) + '</td><td>' + h.fecha + '</td><td><span class="pill ' + (act ? 'activo' : 'devuelto') + '">' + (act ? 'Prestado' : 'Devuelto') + '</span></td><td>' + accion + '</td></tr>';
-    }).join('');
-  }
-
-  /* ══════════════════════════════════════
-     USUARIOS
-     ══════════════════════════════════════ */
-  function renderUsuarios() {
-    const iconos = { admin: '👑', bibliotecario: '📚', usuario: '👤' };
-    document.getElementById('userGrid').innerHTML = USUARIOS.map(u => {
-      return '<div class="user-card"><div class="user-avatar ' + u.rol + '">' + (iconos[u.rol] || '👤') + '</div><div class="user-info"><h4>' + esc(u.nombre) + '</h4><p>' + esc(u.email) + '</p><span class="role-tag ' + u.rol + '">' + esc(u.rol.charAt(0).toUpperCase() + u.rol.slice(1)) + '</span></div></div>';
-    }).join('');
-  }
-
-  /* ══════════════════════════════════════
-     UTILIDADES
-     ══════════════════════════════════════ */
-  function cerrarModalFondo(e) { if (e.target === e.currentTarget) { cerrarModal(); cerrarPrestar(); } }
-  let tt;
-  function toast(msg) {
-    const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
-    clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2500);
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarModal(); cerrarPrestar(); } });
+  // Close mobile menu on link click
+  document.querySelectorAll('#navlinks a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('navlinks').classList.remove('open'));
+  });
 </script>
+
 </body>
 </html>
