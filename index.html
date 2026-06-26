@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca Duoc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral: #FF6B6B;
+    --coral-dark: #E85D5D;
+    --amarillo: #FFD93D;
+    --amarillo-soft: #FFF3CD;
+    --verde: #6BCB77;
+    --verde-dark: #5AB868;
+    --azul: #4D96FF;
+    --azul-soft: #EBF3FF;
+    --bg: #FAFAFA;
+    --blanco: #FFFFFF;
+    --texto: #2D3436;
+    --texto-soft: #636E72;
+    --borde: #E8E8E8;
+    --sombra: rgba(0, 0, 0, 0.06);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, var(--coral), #FF8E53);
+    color: #fff;
+    padding: 32px 24px 28px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  header p {
+    font-size: 14px;
+    opacity: .85;
+    margin-top: 4px;
+  }
+
+  /* ── Contenedor principal ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ── Contadores ── */
+  .stats {
+    display: flex;
+    gap: 14px;
+    margin: -24px auto 24px;
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat {
+    background: var(--blanco);
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    text-align: center;
+    box-shadow: 0 4px 16px var(--sombra);
+    min-width: 140px;
+    flex: 1;
+    max-width: 200px;
+  }
+  .stat .num {
+    font-size: 28px;
+    font-weight: 800;
+  }
+  .stat .lbl {
+    font-size: 12px;
+    color: var(--texto-soft);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-top: 2px;
+  }
+  .stat.total .num { color: var(--azul); }
+  .stat.disp .num { color: var(--verde); }
+  .stat.prest .num { color: var(--coral); }
+
+  /* ── Barra de acciones (buscar, filtros, botón agregar) ── */
+  .toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    border: 2px solid var(--borde);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    background: var(--blanco);
+    transition: border-color .2s;
+  }
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+  .search-box .icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    opacity: .5;
+  }
+  .filter-select {
+    padding: 12px 14px;
+    border: 2px solid var(--borde);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--blanco);
+    cursor: pointer;
+    transition: border-color .2s;
+  }
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+  .btn-add {
+    padding: 12px 22px;
+    background: linear-gradient(135deg, var(--coral), #FF8E53);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .2s;
+    white-space: nowrap;
+  }
+  .btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, .35);
+  }
+
+  /* ── Grilla de tarjetas ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+  .card {
+    background: var(--blanco);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 2px 12px var(--sombra);
+    border: 2px solid transparent;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .08);
+    border-color: var(--amarillo);
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .card-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .card-badge.disponible {
+    background: rgba(107, 203, 119, .15);
+    color: var(--verde-dark);
+  }
+  .card-badge.prestado {
+    background: rgba(255, 107, 107, .12);
+    color: var(--coral);
+  }
+  .card-info {
+    font-size: 14px;
+    color: var(--texto-soft);
+    line-height: 1.6;
+  }
+  .card-info span { display: block; }
+  .card-prestamo {
+    font-size: 13px;
+    color: var(--coral);
+    background: rgba(255, 107, 107, .06);
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 6px;
+    flex-wrap: wrap;
+  }
+  .card-actions button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform .1s, opacity .2s;
+  }
+  .card-actions button:hover { transform: scale(1.04); }
+  .card-actions button:active { transform: scale(.97); }
+  .btn-prestar {
+    background: var(--azul-soft);
+    color: var(--azul);
+  }
+  .btn-devolver {
+    background: rgba(107, 203, 119, .15);
+    color: var(--verde-dark);
+  }
+  .btn-editar {
+    background: var(--amarillo-soft);
+    color: #B8860B;
+  }
+  .btn-eliminar {
+    background: rgba(255, 107, 107, .1);
+    color: var(--coral);
+  }
+
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--texto-soft);
+    grid-column: 1 / -1;
+  }
+  .empty .emoji { font-size: 48px; margin-bottom: 12px; }
+  .empty p { font-size: 15px; }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .4);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--blanco);
+    border-radius: 18px;
+    padding: 28px;
+    width: 420px;
+    max-width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+    animation: modalIn .3s ease;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(20px) scale(.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .modal h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--coral);
+  }
+  .modal label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto-soft);
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  .modal label:first-of-type { margin-top: 0; }
+  .modal input, .modal select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 2px solid var(--borde);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color .2s;
+  }
+  .modal input:focus, .modal select:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+  .modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .modal-buttons button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform .15s;
+  }
+  .modal-buttons button:hover { transform: translateY(-2px); }
+  .modal-buttons .btn-save {
+    background: linear-gradient(135deg, var(--coral), #FF8E53);
+    color: #fff;
+  }
+  .modal-buttons .btn-cancel {
+    background: var(--bg);
+    color: var(--texto-soft);
+    border: 2px solid var(--borde);
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+    color: var(--texto-soft);
+    border-top: 1px solid var(--borde);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    header h1 { font-size: 24px; }
+    .stats { gap: 10px; }
+    .stat { min-width: 100px; padding: 12px 14px; }
+    .stat .num { font-size: 22px; }
+    .toolbar { flex-direction: column; }
+    .search-box { min-width: 100%; }
+    .grid { grid-template-columns: 1fr; }
+    .modal { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Biblioteca Duoc</h1>
+  <p>Gestión de libros — Duoc UC</p>
+</header>
+
+<div class="container">
+
+  <!-- Contadores -->
+  <div class="stats">
+    <div class="stat total">
+      <div class="num" id="statTotal">0</div>
+      <div class="lbl">Total</div>
+    </div>
+    <div class="stat disp">
+      <div class="num" id="statDisp">0</div>
+      <div class="lbl">Disponibles</div>
+    </div>
+    <div class="stat prest">
+      <div class="num" id="statPrest">0</div>
+      <div class="lbl">Prestados</div>
+    </div>
+  </div>
+
+  <!-- Barra de herramientas -->
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar por título o autor...">
+    </div>
+    <select class="filter-select" id="filterEstado">
+      <option value="todos">Todos</option>
+      <option value="disponible">Disponibles</option>
+      <option value="prestado">Prestados</option>
+    </select>
+    <select class="filter-select" id="filterGenero">
+      <option value="todos">Todos los géneros</option>
+    </select>
+    <button class="btn-add" onclick="abrirModal()">+ Agregar libro</button>
+  </div>
+
+  <!-- Grilla de libros -->
+  <div class="grid" id="grid"></div>
+</div>
+
+<footer>Biblioteca Duoc · Hecho con HTML, CSS y JavaScript · Datos guardados en tu navegador</footer>
+
+<!-- Modal para agregar / editar -->
+<div class="modal-overlay" id="modalOverlay" onclick="cerrarModalFondo(event)">
+  <div class="modal">
+    <h3 id="modalTitle">Agregar libro</h3>
+    <label for="mTitulo">Título</label>
+    <input id="mTitulo" placeholder="Ej: Cien años de soledad">
+    <label for="mAutor">Autor</label>
+    <input id="mAutor" placeholder="Ej: Gabriel García Márquez">
+    <label for="mGenero">Género</label>
+    <input id="mGenero" placeholder="Ej: Novela, Ciencia Ficción, Historia...">
+    <label for="mAnio">Año de publicación</label>
+    <input id="mAnio" type="number" placeholder="Ej: 1967">
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-save" onclick="guardarLibro()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para prestar -->
+<div class="modal-overlay" id="prestarOverlay" onclick="cerrarModalFondo(event)">
+  <div class="modal">
+    <h3>📖 Prestar libro</h3>
+    <label for="mPrestatario">¿A quién se lo prestas?</label>
+    <input id="mPrestatario" placeholder="Nombre de la persona">
+    <input type="hidden" id="mPrestarId">
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="cerrarPrestar()">Cancelar</button>
+      <button class="btn-save" onclick="confirmarPrestamo()">Confirmar préstamo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Datos de ejemplo (se cargan solo la primera vez) ──
+  const LIBROS_EJEMPLO = [
+    { id: 1, titulo: "Cien años de soledad", autor: "Gabriel García Márquez", genero: "Novela", anio: 1967, estado: "disponible", prestatario: "", fechaPrestamo: "" },
+    { id: 2, titulo: "1984", autor: "George Orwell", genero: "Ciencia Ficción", anio: 1949, estado: "disponible", prestatario: "", fechaPrestamo: "" },
+    { id: 3, titulo: "Don Quijote de la Mancha", autor: "Miguel de Cervantes", genero: "Novela", anio: 1605, estado: "prestado", prestatario: "Carlos Díaz", fechaPrestamo: "2026-06-20" },
+    { id: 4, titulo: "El Principito", autor: "Antoine de Saint-Exupéry", genero: "Infantil", anio: 1943, estado: "disponible", prestatario: "", fechaPrestamo: "" },
+    { id: 5, titulo: "Breve historia del tiempo", autor: "Stephen Hawking", genero: "Ciencia", anio: 1988, estado: "disponible", prestatario: "", fechaPrestamo: "" },
+    { id: 6, titulo: "La casa de los espíritus", autor: "Isabel Allende", genero: "Novela", anio: 1982, estado: "prestado", prestatario: "María López", fechaPrestamo: "2026-06-18" }
+  ];
+
+  // ── Estado de la aplicación ──
+  let libros = [];
+  let editandoId = null;
+
+  // ── Inicialización ──
+  function init() {
+    const guardado = localStorage.getItem("biblioteca_duoc");
+    if (guardado) {
+      libros = JSON.parse(guardado);
+    } else {
+      libros = JSON.parse(JSON.stringify(LIBROS_EJEMPLO));
+      guardar();
+    }
+    actualizarGeneros();
+    renderizar();
+  }
+
+  // ── Persistencia ──
+  function guardar() {
+    localStorage.setItem("biblioteca_duoc", JSON.stringify(libros));
+  }
+
+  function siguienteId() {
+    if (libros.length === 0) return 1;
+    return Math.max(...libros.map(l => l.id)) + 1;
+  }
+
+  // ── Renderizado ──
+  function renderizar() {
+    const filtrados = filtrar();
+    actualizarContadores();
+    const grid = document.getElementById("grid");
+
+    if (filtrados.length === 0) {
+      grid.innerHTML = '<div class="empty"><div class="emoji">📭</div><p>No se encontraron libros</p></div>';
+      return;
+    }
+
+    grid.innerHTML = filtrados.map(libro => {
+      const esPrestado = libro.estado === "prestado";
+      return `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">${esc(libro.titulo)}</div>
+            <span class="card-badge ${libro.estado}">${esPrestado ? "Prestado" : "Disponible"}</span>
+          </div>
+          <div class="card-info">
+            <span>✍️ ${esc(libro.autor)}</span>
+            <span>📁 ${esc(libro.genero)} · 📅 ${libro.anio}</span>
+          </div>
+          ${esPrestado ? `<div class="card-prestamo">👤 ${esc(libro.prestatario)} · desde ${libro.fechaPrestamo}</div>` : ""}
+          <div class="card-actions">
+            ${esPrestado
+              ? `<button class="btn-devolver" onclick="devolver(${libro.id})">↩ Devolver</button>`
+              : `<button class="btn-prestar" onclick="abrirPrestar(${libro.id})">📖 Prestar</button>`
+            }
+            <button class="btn-editar" onclick="editar(${libro.id})">✏️ Editar</button>
+            <button class="btn-eliminar" onclick="eliminar(${libro.id})">🗑️ Eliminar</button>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  // Escapar HTML para evitar inyección
+  function esc(texto) {
+    const div = document.createElement("div");
+    div.textContent = texto;
+    return div.innerHTML;
+  }
+
+  // ── Filtros ──
+  function filtrar() {
+    const busqueda = document.getElementById("searchInput").value.toLowerCase();
+    const estado = document.getElementById("filterEstado").value;
+    const genero = document.getElementById("filterGenero").value;
+
+    return libros.filter(l => {
+      const coincideBusqueda = l.titulo.toLowerCase().includes(busqueda) || l.autor.toLowerCase().includes(busqueda);
+      const coincidenEstado = estado === "todos" || l.estado === estado;
+      const coincidenGenero = genero === "todos" || l.genero === genero;
+      return coincideBusqueda && coincidenEstado && coincidenGenero;
+    });
+  }
+
+  function actualizarContadores() {
+    const total = libros.length;
+    const disponibles = libros.filter(l => l.estado === "disponible").length;
+    const prestados = libros.filter(l => l.estado === "prestado").length;
+    document.getElementById("statTotal").textContent = total;
+    document.getElementById("statDisp").textContent = disponibles;
+    document.getElementById("statPrest").textContent = prestados;
+  }
+
+  function actualizarGeneros() {
+    const select = document.getElementById("filterGenero");
+    const generos = [...new Set(libros.map(l => l.genero).filter(Boolean))].sort();
+    const valorActual = select.value;
+    select.innerHTML = '<option value="todos">Todos los géneros</option>';
+    generos.forEach(g => {
+      select.innerHTML += `<option value="${esc(g)}">${esc(g)}</option>`;
+    });
+    select.value = valorActual;
+  }
+
+  // ── Modal agregar / editar ──
+  function abrirModal(id) {
+    editandoId = id || null;
+    document.getElementById("modalTitle").textContent = id ? "Editar libro" : "Agregar libro";
+
+    if (id) {
+      const libro = libros.find(l => l.id === id);
+      document.getElementById("mTitulo").value = libro.titulo;
+      document.getElementById("mAutor").value = libro.autor;
+      document.getElementById("mGenero").value = libro.genero;
+      document.getElementById("mAnio").value = libro.anio;
+    } else {
+      document.getElementById("mTitulo").value = "";
+      document.getElementById("mAutor").value = "";
+      document.getElementById("mGenero").value = "";
+      document.getElementById("mAnio").value = "";
+    }
+
+    document.getElementById("modalOverlay").classList.add("active");
+    document.getElementById("mTitulo").focus();
+  }
+
+  function cerrarModal() {
+    document.getElementById("modalOverlay").classList.remove("active");
+    editandoId = null;
+  }
+
+  function guardarLibro() {
+    const titulo = document.getElementById("mTitulo").value.trim();
+    const autor = document.getElementById("mAutor").value.trim();
+    const genero = document.getElementById("mGenero").value.trim();
+    const anio = parseInt(document.getElementById("mAnio").value);
+
+    if (!titulo || !autor || !genero || isNaN(anio)) {
+      alert("Completa todos los campos correctamente.");
+      return;
+    }
+
+    if (editandoId) {
+      const libro = libros.find(l => l.id === editandoId);
+      libro.titulo = titulo;
+      libro.autor = autor;
+      libro.genero = genero;
+      libro.anio = anio;
+    } else {
+      libros.push({
+        id: siguienteId(),
+        titulo, autor, genero, anio,
+        estado: "disponible",
+        prestatario: "",
+        fechaPrestamo: ""
+      });
+    }
+
+    guardar();
+    actualizarGeneros();
+    renderizar();
+    cerrarModal();
+  }
+
+  function editar(id) {
+    abrirModal(id);
+  }
+
+  function eliminar(id) {
+    const libro = libros.find(l => l.id === id);
+    if (!confirm(`¿Eliminar "${libro.titulo}"?`)) return;
+    libros = libros.filter(l => l.id !== id);
+    guardar();
+    actualizarGeneros();
+    renderizar();
+  }
+
+  // ── Préstamo / devolución ──
+  function abrirPrestar(id) {
+    document.getElementById("mPrestarId").value = id;
+    document.getElementById("mPrestatario").value = "";
+    document.getElementById("prestarOverlay").classList.add("active");
+    document.getElementById("mPrestatario").focus();
+  }
+
+  function cerrarPrestar() {
+    document.getElementById("prestarOverlay").classList.remove("active");
+  }
+
+  function confirmarPrestamo() {
+    const nombre = document.getElementById("mPrestatario").value.trim();
+    if (!nombre) {
+      alert("Ingresa el nombre de la persona.");
+      return;
+    }
+    const id = parseInt(document.getElementById("mPrestarId").value);
+    const libro = libros.find(l => l.id === id);
+    libro.estado = "prestado";
+    libro.prestatario = nombre;
+    libro.fechaPrestamo = new Date().toISOString().slice(0, 10);
+    guardar();
+    renderizar();
+    cerrarPrestar();
+  }
+
+  function devolver(id) {
+    const libro = libros.find(l => l.id === id);
+    libro.estado = "disponible";
+    libro.prestatario = "";
+    libro.fechaPrestamo = "";
+    guardar();
+    renderizar();
+  }
+
+  // Cerrar modales al hacer clic fuera
+  function cerrarModalFondo(e) {
+    if (e.target === e.currentTarget) {
+      cerrarModal();
+      cerrarPrestar();
+    }
+  }
+
+  // ── Eventos de filtros en vivo ──
+  document.getElementById("searchInput").addEventListener("input", renderizar);
+  document.getElementById("filterEstado").addEventListener("change", renderizar);
+  document.getElementById("filterGenero").addEventListener("change", renderizar);
+
+  // Cerrar modales con Escape
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      cerrarModal();
+      cerrarPrestar();
+    }
+  });
+
+  // Iniciar la aplicación
+  init();
+</script>
+</body>
+</html>

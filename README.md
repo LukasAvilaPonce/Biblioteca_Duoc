@@ -1,100 +1,53 @@
-# Biblioteca Duoc — API REST
+# Biblioteca Duoc
 
-API REST para gestión de libros desarrollada con **Java 21** y **Spring Boot 4.0.5**. Permite registrar, consultar, actualizar, eliminar y buscar libros por autor mediante endpoints RESTful con validación de datos.
+Aplicación web de gestión de libros desarrollada con **HTML, CSS y JavaScript puro**. Funciona 100% en el navegador sin necesidad de backend — los datos se guardan en **localStorage** y persisten entre visitas.
 
-## Características
+Publicada en GitHub Pages: **https://lukasavilaponce.github.io/bibliotecaduoc/**
 
-- **CRUD completo de libros** — crear, listar, actualizar y eliminar.
-- **Búsqueda por autor** — filtrado por nombre de autor (case-insensitive).
-- **Validación de datos** — Jakarta Validation (`@NotNull`, `@NotBlank`, `@Min`) con respuesta detallada por campo en caso de error.
-- **Manejo de errores** — excepciones de negocio (ISBN duplicado, libro inexistente) con códigos HTTP apropiados (400, 404).
-- **Datos precargados** — 10 libros de prueba generados automáticamente al iniciar (`@PostConstruct`).
-- **Almacenamiento en memoria** — `ArrayList` como repositorio (sin base de datos externa).
+## Funcionalidades
 
-## Stack / Tecnologías
+- **Catálogo visual** — libros mostrados en tarjetas con título, autor, género, año y estado (Disponible / Prestado).
+- **Agregar libros** — formulario para registrar nuevos libros.
+- **Editar y eliminar** — modificar datos o quitar libros del catálogo.
+- **Préstamo y devolución** — prestar un libro registrando quién se lo lleva y la fecha; devolver con un clic.
+- **Buscador en vivo** — filtra por título o autor mientras se escribe.
+- **Filtros** — por estado (Todos / Disponibles / Prestados) y por género.
+- **Contadores** — total de libros, disponibles y prestados en tiempo real.
+- **6 libros de ejemplo** precargados la primera vez.
+- **Datos persistentes** — todo se guarda en localStorage del navegador.
 
-| Tecnología | Versión |
-|------------|---------|
-| Java | 21 |
-| Spring Boot | 4.0.5 |
-| Spring Web MVC | (incluido en starter) |
-| Jakarta Validation | (incluido en starter) |
-| Lombok | — |
-| Maven | Wrapper incluido |
+## Tecnologías
 
-> **Nota:** No se utiliza base de datos. Los datos viven en memoria y se reinician con cada arranque de la aplicación.
+| Tecnología | Uso |
+|------------|-----|
+| HTML5 | Estructura y semántica |
+| CSS3 | Diseño responsivo, tarjetas, animaciones |
+| JavaScript | Lógica de la aplicación, CRUD, filtros |
+| localStorage | Persistencia de datos en el navegador |
+| Google Fonts (Nunito) | Tipografía |
 
-## Modelo — `Libro`
+## Cómo usarlo
 
-| Campo | Tipo | Validación |
-|-------|------|------------|
-| `id` | `Integer` | `@NotNull` — ISBN obligatorio |
-| `titulo` | `String` | `@NotBlank` — no puede estar vacío |
-| `autor` | `String` | `@NotBlank` — obligatorio |
-| `paginas` | `int` | `@Min(1)` — al menos 1 página |
-| `anioPublicacion` | `int` | `@Min(1800)` — no anterior a 1800 |
+### Opción 1 — GitHub Pages
+Visita directamente: **https://lukasavilaponce.github.io/bibliotecaduoc/**
 
-## Endpoints
-
-Base: `/api/v1/libros`
-
-| Método | Ruta | Descripción | Código éxito |
-|--------|------|-------------|--------------|
-| `GET` | `/api/v1/libros` | Listar todos los libros | `200 OK` |
-| `POST` | `/api/v1/libros` | Registrar un libro nuevo | `201 Created` |
-| `PUT` | `/api/v1/libros` | Actualizar un libro existente | `200 OK` |
-| `DELETE` | `/api/v1/libros/{id}` | Eliminar un libro por ID | `204 No Content` |
-| `GET` | `/api/v1/libros/buscar?autor=X` | Buscar libros por autor | `200 OK` |
-
-### Ejemplo de JSON (POST / PUT)
-
-```json
-{
-  "id": 101,
-  "titulo": "Programación en Java 21",
-  "autor": "Autor Ejemplo",
-  "paginas": 350,
-  "anioPublicacion": 2025
-}
-```
-
-### Errores
-
-| Caso | Código | Respuesta |
-|------|--------|-----------|
-| ISBN duplicado | `400 Bad Request` | `"Error: El ISBN 101 ya está registrado."` |
-| Libro no encontrado (PUT/DELETE) | `404 Not Found` | `"Error: No se puede editar un libro que no existe (ID: 99)"` |
-| Validación fallida | `400 Bad Request` | `{"titulo": "El título no puede estar en blanco", ...}` |
+### Opción 2 — Local
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/LukasAvilaPonce/bibliotecaduoc.git
+   ```
+2. Abre `index.html` en tu navegador. No necesitas servidor ni instalación.
 
 ## Estructura del proyecto
 
 ```
-src/main/java/com/example/bibliotecaduoc/
-├── BibliotecaduocApplication.java      # Clase principal
-├── controller/
-│   └── LibroController.java            # Endpoints REST + manejo de errores
-├── model/
-│   └── Libro.java                      # Entidad con validaciones
-├── repository/
-│   └── LibroRepository.java            # Almacenamiento en memoria (ArrayList)
-└── service/
-    └── LibroService.java               # Lógica de negocio
+bibliotecaduoc/
+├── index.html          # Aplicación web completa (CSS y JS inline)
+├── README.md           # Este archivo
+└── src/                # Código fuente del API REST original (Java/Spring Boot)
 ```
 
-## Cómo ejecutarlo
-
-1. Asegúrate de tener **Java 21** instalado.
-2. Clona o descarga el proyecto.
-3. Ejecuta con el Maven Wrapper incluido:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-   En Windows:
-   ```cmd
-   mvnw.cmd spring-boot:run
-   ```
-4. La API estará disponible en `http://localhost:8080/api/v1/libros`.
-5. Prueba los endpoints con **Postman**, **curl** o cualquier cliente HTTP.
+> **Nota:** La carpeta `src/` contiene una versión anterior del proyecto como API REST en Java 21 / Spring Boot. Se conserva como referencia.
 
 ## Autor
 
