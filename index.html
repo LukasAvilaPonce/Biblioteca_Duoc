@@ -31,9 +31,7 @@
     --sombra: rgba(0,0,0,.06);
     --sidebar-bg: #1E272E;
     --sidebar-hover: #2C3A47;
-    --sidebar-active: var(--coral);
     --radius: 14px;
-    --transition: .25s ease;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--texto); min-height: 100vh; overflow-x: hidden; }
@@ -46,16 +44,12 @@
   #loginScreen {
     align-items: center; justify-content: center; padding: 20px;
     background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFD93D 100%);
-    background-size: 300% 300%;
-    animation: bgMove 8s ease infinite;
+    background-size: 300% 300%; animation: bgMove 8s ease infinite;
   }
-  @keyframes bgMove {
-    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
-  }
+  @keyframes bgMove { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
   .login-card {
     background: var(--blanco); border-radius: 22px; padding: 44px 38px; width: 400px; max-width: 100%;
-    box-shadow: 0 30px 80px rgba(0,0,0,.18);
-    animation: cardPop .6s cubic-bezier(.16,1,.3,1) both;
+    box-shadow: 0 30px 80px rgba(0,0,0,.18); animation: cardPop .6s cubic-bezier(.16,1,.3,1) both;
   }
   @keyframes cardPop { 0%{opacity:0;transform:translateY(30px) scale(.95)} 100%{opacity:1;transform:translateY(0) scale(1)} }
   .login-brand { text-align: center; margin-bottom: 30px; }
@@ -64,11 +58,11 @@
   .login-brand p { font-size: 14px; color: var(--texto-soft); margin-top: 4px; }
   .field { margin-top: 18px; }
   .field label { display: block; font-size: 13px; font-weight: 700; color: var(--texto-soft); margin-bottom: 6px; }
-  .field input, .field select {
+  .field input {
     width: 100%; padding: 13px 16px; border: 2px solid var(--borde); border-radius: 12px;
     font-size: 15px; font-family: inherit; background: var(--bg); transition: border-color .2s;
   }
-  .field input:focus, .field select:focus { outline: none; border-color: var(--coral); }
+  .field input:focus { outline: none; border-color: var(--coral); }
   .login-btn {
     width: 100%; padding: 14px; margin-top: 26px;
     background: linear-gradient(135deg, var(--coral), var(--naranja));
@@ -86,9 +80,10 @@
   @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
   .login-hint {
     margin-top: 20px; padding: 14px; border-radius: 10px; background: var(--azul-soft);
-    font-size: 12px; color: var(--azul); line-height: 1.6;
+    font-size: 12px; color: var(--azul); line-height: 1.8;
   }
   .login-hint b { display: block; margin-bottom: 4px; font-size: 13px; }
+  .login-hint .hint-role { display: inline-block; min-width: 90px; font-weight: 700; }
 
   /* ══════════════════════════════════════
      APP SHELL
@@ -108,15 +103,16 @@
   .topbar-right { display: flex; align-items: center; gap: 14px; }
   .topbar-user { font-size: 14px; color: var(--texto-soft); }
   .topbar-role {
-    font-size: 11px; background: var(--coral-soft); color: var(--coral); padding: 4px 10px;
-    border-radius: 6px; font-weight: 700;
+    font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 700;
   }
+  .topbar-role.admin { background: var(--coral-soft); color: var(--coral); }
+  .topbar-role.bibliotecario { background: var(--azul-soft); color: var(--azul); }
+  .topbar-role.usuario { background: var(--verde-soft); color: var(--verde-dark); }
   .btn-logout {
     background: none; border: 1px solid var(--borde); padding: 7px 14px; border-radius: 8px;
     cursor: pointer; font-size: 13px; font-family: inherit; color: var(--texto-soft); transition: .2s;
   }
   .btn-logout:hover { border-color: var(--coral); color: var(--coral); }
-
   .app-body { display: flex; flex: 1; }
 
   /* Sidebar */
@@ -130,8 +126,7 @@
   }
   .nav-item {
     display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px;
-    cursor: pointer; color: rgba(255,255,255,.6); font-size: 14px; font-weight: 600;
-    transition: all .2s;
+    cursor: pointer; color: rgba(255,255,255,.6); font-size: 14px; font-weight: 600; transition: all .2s;
   }
   .nav-item:hover { background: var(--sidebar-hover); color: #fff; transform: translateX(3px); }
   .nav-item.active {
@@ -139,12 +134,10 @@
     box-shadow: 0 4px 16px rgba(255,107,107,.3);
   }
   .nav-item .ic { width: 22px; text-align: center; font-size: 16px; }
-
   .main-content { flex: 1; padding: 28px 32px; overflow-y: auto; max-height: calc(100vh - 60px); }
   .page { display: none; }
   .page.active { display: block; animation: fadeIn .35s ease; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-
   .page-title { font-size: 24px; font-weight: 800; color: var(--texto); margin-bottom: 4px; }
   .page-sub { font-size: 14px; color: var(--texto-soft); margin-bottom: 24px; }
 
@@ -157,9 +150,7 @@
     box-shadow: 0 2px 12px var(--sombra); overflow: hidden; transition: transform .2s, box-shadow .2s;
   }
   .dash-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.08); }
-  .dash-card::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-  }
+  .dash-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
   .dash-card.c-azul::before { background: var(--azul); }
   .dash-card.c-verde::before { background: var(--verde); }
   .dash-card.c-coral::before { background: var(--coral); }
@@ -171,25 +162,18 @@
   .dash-card.c-coral .dc-val { color: var(--coral); }
   .dash-card.c-morado .dc-val { color: var(--morado); }
   .dash-card .dc-lbl { font-size: 13px; color: var(--texto-soft); margin-top: 2px; }
-
   .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .panel {
     background: var(--blanco); border-radius: var(--radius); padding: 24px;
     box-shadow: 0 2px 12px var(--sombra);
   }
   .panel h3 { font-size: 16px; font-weight: 800; margin-bottom: 18px; color: var(--texto); }
-
-  /* Barras de género */
   .genre-bar { margin-bottom: 14px; }
   .genre-bar .gb-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
   .genre-bar .gb-label span:first-child { color: var(--texto); font-weight: 600; }
   .genre-bar .gb-label span:last-child { color: var(--texto-soft); }
   .genre-bar .gb-track { height: 10px; background: var(--bg); border-radius: 10px; overflow: hidden; }
-  .genre-bar .gb-fill {
-    height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(.22,1,.36,1);
-  }
-
-  /* Actividad reciente */
+  .genre-bar .gb-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(.22,1,.36,1); }
   .activity-item {
     display: flex; align-items: center; gap: 12px; padding: 12px 0;
     border-bottom: 1px solid var(--borde); font-size: 14px;
@@ -201,7 +185,6 @@
   }
   .activity-item .ai-icon.prestamo { background: var(--coral-soft); }
   .activity-item .ai-icon.devolucion { background: var(--verde-soft); }
-  .activity-item .ai-icon.nuevo { background: var(--azul-soft); }
   .activity-item .ai-text { flex: 1; color: var(--texto-soft); line-height: 1.4; }
   .activity-item .ai-text b { color: var(--texto); }
   .activity-item .ai-date { font-size: 12px; color: var(--texto-light); white-space: nowrap; }
@@ -232,32 +215,46 @@
   .btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,107,.35); }
 
   .grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; margin-bottom: 40px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; margin-bottom: 40px;
   }
   .card {
-    background: var(--blanco); border-radius: var(--radius); padding: 20px;
+    background: var(--blanco); border-radius: var(--radius); padding: 0;
     box-shadow: 0 2px 12px var(--sombra); border: 2px solid transparent;
     transition: transform .2s, box-shadow .2s, border-color .2s;
-    display: flex; flex-direction: column; gap: 10px;
+    display: flex; flex-direction: row; overflow: hidden;
   }
   .card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.08); border-color: var(--amarillo); }
+  .card-cover {
+    width: 110px; min-height: 170px; flex-shrink: 0; background: var(--bg);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .card-cover img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .card-cover .cover-placeholder {
+    font-size: 40px; color: var(--texto-light); display: flex; align-items: center;
+    justify-content: center; width: 100%; height: 100%; background: linear-gradient(135deg, var(--bg), var(--borde));
+  }
+  .card-body {
+    flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 8px;
+  }
   .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-  .card-title { font-size: 17px; font-weight: 700; line-height: 1.3; }
+  .card-title { font-size: 16px; font-weight: 700; line-height: 1.3; }
   .card-badge {
     padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
     text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; flex-shrink: 0;
   }
   .card-badge.disponible { background: var(--verde-soft); color: var(--verde-dark); }
   .card-badge.prestado { background: var(--coral-soft); color: var(--coral); }
-  .card-info { font-size: 14px; color: var(--texto-soft); line-height: 1.6; }
+  .card-info { font-size: 13px; color: var(--texto-soft); line-height: 1.5; }
   .card-info span { display: block; }
   .card-prestamo {
-    font-size: 13px; color: var(--coral); background: var(--coral-soft);
-    padding: 8px 12px; border-radius: 8px;
+    font-size: 12px; color: var(--coral); background: var(--coral-soft);
+    padding: 6px 10px; border-radius: 8px;
   }
-  .card-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 6px; flex-wrap: wrap; }
+  .card-actions { display: flex; gap: 6px; margin-top: auto; padding-top: 4px; flex-wrap: wrap; }
   .card-actions button {
-    padding: 8px 14px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+    padding: 6px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600;
     font-family: inherit; cursor: pointer; transition: transform .1s;
   }
   .card-actions button:hover { transform: scale(1.04); }
@@ -266,7 +263,6 @@
   .btn-devolver { background: var(--verde-soft); color: var(--verde-dark); }
   .btn-editar { background: var(--amarillo-soft); color: #B8860B; }
   .btn-eliminar { background: var(--coral-soft); color: var(--coral); }
-
   .empty { text-align: center; padding: 60px 20px; color: var(--texto-soft); grid-column: 1 / -1; }
   .empty .emoji { font-size: 48px; margin-bottom: 12px; }
 
@@ -282,26 +278,22 @@
   table.data td { padding: 14px 16px; border-bottom: 1px solid var(--borde); color: var(--texto); }
   table.data tbody tr { transition: background .15s; }
   table.data tbody tr:hover td { background: var(--azul-soft); }
-  .pill {
-    display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
-  }
+  .pill { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
   .pill.activo { background: var(--coral-soft); color: var(--coral); }
   .pill.devuelto { background: var(--verde-soft); color: var(--verde-dark); }
   .btn-table {
     padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700;
-    font-family: inherit; cursor: pointer; background: var(--verde-soft); color: var(--verde-dark);
-    transition: transform .1s;
+    font-family: inherit; cursor: pointer; background: var(--verde-soft); color: var(--verde-dark); transition: transform .1s;
   }
   .btn-table:hover { transform: scale(1.05); }
 
   /* ══════════════════════════════════════
-     USUARIOS (admin)
+     USUARIOS
      ══════════════════════════════════════ */
   .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
   .user-card {
     background: var(--blanco); border-radius: var(--radius); padding: 20px;
-    box-shadow: 0 2px 12px var(--sombra); display: flex; align-items: center; gap: 16px;
-    transition: transform .2s;
+    box-shadow: 0 2px 12px var(--sombra); display: flex; align-items: center; gap: 16px; transition: transform .2s;
   }
   .user-card:hover { transform: translateY(-3px); }
   .user-avatar {
@@ -309,7 +301,8 @@
     justify-content: center; font-size: 22px; flex-shrink: 0;
   }
   .user-avatar.admin { background: var(--coral-soft); }
-  .user-avatar.biblio { background: var(--azul-soft); }
+  .user-avatar.bibliotecario { background: var(--azul-soft); }
+  .user-avatar.usuario { background: var(--verde-soft); }
   .user-info h4 { font-size: 15px; font-weight: 700; }
   .user-info p { font-size: 13px; color: var(--texto-soft); }
   .user-info .role-tag {
@@ -317,7 +310,8 @@
     font-size: 11px; font-weight: 700;
   }
   .role-tag.admin { background: var(--coral-soft); color: var(--coral); }
-  .role-tag.biblio { background: var(--azul-soft); color: var(--azul); }
+  .role-tag.bibliotecario { background: var(--azul-soft); color: var(--azul); }
+  .role-tag.usuario { background: var(--verde-soft); color: var(--verde-dark); }
 
   /* ══════════════════════════════════════
      MODALES
@@ -329,8 +323,7 @@
   .modal-overlay.active { display: flex; }
   .modal {
     background: var(--blanco); border-radius: 18px; padding: 28px; width: 440px; max-width: 100%;
-    max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2);
-    animation: modalIn .3s ease;
+    max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2); animation: modalIn .3s ease;
   }
   @keyframes modalIn { from{opacity:0;transform:translateY(20px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
   .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: var(--coral); }
@@ -353,15 +346,12 @@
   .modal-buttons .btn-save { background: linear-gradient(135deg, var(--coral), var(--naranja)); color: #fff; }
   .modal-buttons .btn-cancel { background: var(--bg); color: var(--texto-soft); border: 2px solid var(--borde); }
 
-  /* Toast */
   .toast {
     position: fixed; bottom: 24px; right: 24px; background: var(--sidebar-bg); color: #fff;
     padding: 14px 22px; border-radius: 12px; font-size: 14px; font-weight: 600; opacity: 0;
     transform: translateY(10px); transition: .3s; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,.2);
   }
   .toast.show { opacity: 1; transform: translateY(0); }
-
-  /* Overlay sidebar móvil */
   .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 25; }
   .sidebar-overlay.show { display: block; }
 
@@ -384,6 +374,8 @@
     .topbar-user { display: none; }
     .dash-cards { grid-template-columns: 1fr 1fr; }
     .grid { grid-template-columns: 1fr; }
+    .card { flex-direction: row; }
+    .card-cover { width: 90px; min-height: 140px; }
   }
   @media (max-width: 480px) {
     .dash-cards { grid-template-columns: 1fr; }
@@ -405,25 +397,19 @@
     </div>
     <div class="field">
       <label>Usuario</label>
-      <input id="loginUser" placeholder="Ingresa tu usuario" value="admin">
+      <input id="loginUser" placeholder="Ingresa tu usuario">
     </div>
     <div class="field">
       <label>Contraseña</label>
-      <input id="loginPass" type="password" placeholder="Ingresa tu contraseña" value="1234">
-    </div>
-    <div class="field">
-      <label>Perfil</label>
-      <select id="loginRole">
-        <option value="admin">Administrador</option>
-        <option value="bibliotecario">Bibliotecario</option>
-      </select>
+      <input id="loginPass" type="password" placeholder="Ingresa tu contraseña">
     </div>
     <button class="login-btn" onclick="login()">Iniciar sesión</button>
     <div class="login-error" id="loginError">Usuario o contraseña incorrectos.</div>
     <div class="login-hint">
       <b>Credenciales de prueba:</b>
-      Usuario: <strong>admin</strong> · Contraseña: <strong>1234</strong> (Administrador)<br>
-      Usuario: <strong>biblio</strong> · Contraseña: <strong>1234</strong> (Bibliotecario)
+      <span class="hint-role">admin</span> / 1234 → Administrador<br>
+      <span class="hint-role">biblio</span> / 1234 → Bibliotecario<br>
+      <span class="hint-role">usuario</span> / 1234 → Usuario
     </div>
   </div>
 </div>
@@ -432,71 +418,42 @@
      PANTALLA: APP
      ════════════════════════════════════════ -->
 <div id="appScreen" class="screen">
-  <!-- Topbar -->
   <div class="topbar">
     <div class="topbar-left">
       <button class="hamburger" onclick="toggleSidebar()">☰</button>
       <div class="topbar-title">📚 Biblioteca Duoc</div>
     </div>
     <div class="topbar-right">
-      <span class="topbar-user" id="topUser">Admin</span>
-      <span class="topbar-role" id="topRole">Administrador</span>
+      <span class="topbar-user" id="topUser"></span>
+      <span class="topbar-role" id="topRole"></span>
       <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
     </div>
   </div>
-
   <div class="app-body">
-    <!-- Sidebar -->
     <nav class="sidebar" id="sidebar"></nav>
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-    <!-- Contenido principal -->
     <main class="main-content">
 
-      <!-- ── DASHBOARD ── -->
+      <!-- DASHBOARD -->
       <section class="page active" id="pageDashboard">
         <h2 class="page-title">Dashboard</h2>
         <p class="page-sub">Resumen general de la biblioteca.</p>
-
         <div class="dash-cards">
-          <div class="dash-card c-azul">
-            <div class="dc-icon">📖</div>
-            <div class="dc-val" id="dTotal">0</div>
-            <div class="dc-lbl">Total de libros</div>
-          </div>
-          <div class="dash-card c-verde">
-            <div class="dc-icon">✅</div>
-            <div class="dc-val" id="dDisp">0</div>
-            <div class="dc-lbl">Disponibles</div>
-          </div>
-          <div class="dash-card c-coral">
-            <div class="dc-icon">📤</div>
-            <div class="dc-val" id="dPrest">0</div>
-            <div class="dc-lbl">Prestados</div>
-          </div>
-          <div class="dash-card c-morado">
-            <div class="dc-icon">📁</div>
-            <div class="dc-val" id="dGeneros">0</div>
-            <div class="dc-lbl">Géneros</div>
-          </div>
+          <div class="dash-card c-azul"><div class="dc-icon">📖</div><div class="dc-val" id="dTotal">0</div><div class="dc-lbl">Total de libros</div></div>
+          <div class="dash-card c-verde"><div class="dc-icon">✅</div><div class="dc-val" id="dDisp">0</div><div class="dc-lbl">Disponibles</div></div>
+          <div class="dash-card c-coral"><div class="dc-icon">📤</div><div class="dc-val" id="dPrest">0</div><div class="dc-lbl">Prestados</div></div>
+          <div class="dash-card c-morado"><div class="dc-icon">📁</div><div class="dc-val" id="dGeneros">0</div><div class="dc-lbl">Géneros</div></div>
         </div>
-
         <div class="dash-grid">
-          <div class="panel">
-            <h3>📊 Libros por género</h3>
-            <div id="genreCharts"></div>
-          </div>
-          <div class="panel">
-            <h3>🕐 Actividad reciente</h3>
-            <div id="activityList"></div>
-          </div>
+          <div class="panel"><h3>📊 Libros por género</h3><div id="genreCharts"></div></div>
+          <div class="panel"><h3>🕐 Actividad reciente</h3><div id="activityList"></div></div>
         </div>
       </section>
 
-      <!-- ── CATÁLOGO ── -->
+      <!-- CATÁLOGO -->
       <section class="page" id="pageCatalogo">
         <h2 class="page-title">Catálogo de libros</h2>
-        <p class="page-sub">Administra el inventario completo de la biblioteca.</p>
+        <p class="page-sub">Explora el inventario completo de la biblioteca.</p>
         <div class="toolbar">
           <div class="search-box">
             <span class="icon">🔍</span>
@@ -510,28 +467,26 @@
           <select class="filter-select" id="filterGenero">
             <option value="todos">Todos los géneros</option>
           </select>
-          <button class="btn-add" onclick="abrirModal()">+ Agregar libro</button>
+          <button class="btn-add" id="btnAgregar" onclick="abrirModal()" style="display:none">+ Agregar libro</button>
         </div>
         <div class="grid" id="grid"></div>
       </section>
 
-      <!-- ── PRÉSTAMOS ── -->
+      <!-- PRÉSTAMOS -->
       <section class="page" id="pagePrestamos">
         <h2 class="page-title">Historial de préstamos</h2>
         <p class="page-sub">Registro de todos los préstamos y devoluciones.</p>
         <div class="panel">
           <div class="table-wrap">
             <table class="data" id="tablaPrestamos">
-              <thead>
-                <tr><th>Libro</th><th>Prestatario</th><th>Fecha préstamo</th><th>Estado</th><th>Acción</th></tr>
-              </thead>
+              <thead><tr><th>Libro</th><th>Prestatario</th><th>Fecha préstamo</th><th>Estado</th><th>Acción</th></tr></thead>
               <tbody></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- ── USUARIOS (solo admin) ── -->
+      <!-- USUARIOS -->
       <section class="page" id="pageUsuarios">
         <h2 class="page-title">Usuarios del sistema</h2>
         <p class="page-sub">Usuarios registrados en la plataforma.</p>
@@ -542,7 +497,7 @@
   </div>
 </div>
 
-<!-- Modal: agregar / editar libro -->
+<!-- Modal: agregar / editar -->
 <div class="modal-overlay" id="modalOverlay" onclick="cerrarModalFondo(event)">
   <div class="modal">
     <h3 id="modalTitle">Agregar libro</h3>
@@ -561,7 +516,7 @@
   </div>
 </div>
 
-<!-- Modal: prestar libro -->
+<!-- Modal: prestar -->
 <div class="modal-overlay" id="prestarOverlay" onclick="cerrarModalFondo(event)">
   <div class="modal">
     <h3>📖 Prestar libro</h3>
@@ -579,44 +534,47 @@
 
 <script>
   /* ══════════════════════════════════════
-     DATOS DE EJEMPLO
+     DATOS
      ══════════════════════════════════════ */
   const LIBROS_EJEMPLO = [
-    { id:1, titulo:"Cien años de soledad", autor:"Gabriel García Márquez", genero:"Novela", anio:1967, estado:"disponible", prestatario:"", fechaPrestamo:"" },
-    { id:2, titulo:"1984", autor:"George Orwell", genero:"Ciencia Ficción", anio:1949, estado:"disponible", prestatario:"", fechaPrestamo:"" },
-    { id:3, titulo:"Don Quijote de la Mancha", autor:"Miguel de Cervantes", genero:"Clásico", anio:1605, estado:"prestado", prestatario:"Carlos Díaz", fechaPrestamo:"2026-06-20" },
-    { id:4, titulo:"El Principito", autor:"Antoine de Saint-Exupéry", genero:"Infantil", anio:1943, estado:"disponible", prestatario:"", fechaPrestamo:"" },
-    { id:5, titulo:"Breve historia del tiempo", autor:"Stephen Hawking", genero:"Ciencia", anio:1988, estado:"prestado", prestatario:"Ana Morales", fechaPrestamo:"2026-06-15" },
-    { id:6, titulo:"La casa de los espíritus", autor:"Isabel Allende", genero:"Novela", anio:1982, estado:"disponible", prestatario:"", fechaPrestamo:"" },
-    { id:7, titulo:"Fahrenheit 451", autor:"Ray Bradbury", genero:"Ciencia Ficción", anio:1953, estado:"disponible", prestatario:"", fechaPrestamo:"" },
-    { id:8, titulo:"Orgullo y prejuicio", autor:"Jane Austen", genero:"Clásico", anio:1813, estado:"prestado", prestatario:"María López", fechaPrestamo:"2026-06-18" },
-    { id:9, titulo:"El código Da Vinci", autor:"Dan Brown", genero:"Misterio", anio:2003, estado:"disponible", prestatario:"", fechaPrestamo:"" },
-    { id:10, titulo:"Sapiens", autor:"Yuval Noah Harari", genero:"Historia", anio:2011, estado:"disponible", prestatario:"", fechaPrestamo:"" },
-    { id:11, titulo:"Harry Potter y la piedra filosofal", autor:"J.K. Rowling", genero:"Fantasía", anio:1997, estado:"disponible", prestatario:"", fechaPrestamo:"" },
-    { id:12, titulo:"Rayuela", autor:"Julio Cortázar", genero:"Novela", anio:1963, estado:"prestado", prestatario:"Pedro Soto", fechaPrestamo:"2026-06-22" }
+    { id:1,  titulo:"Cien años de soledad",         autor:"Gabriel García Márquez",    genero:"Novela",           anio:1967, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780060883287-M.jpg" },
+    { id:2,  titulo:"1984",                          autor:"George Orwell",             genero:"Ciencia Ficción",  anio:1949, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780451524935-M.jpg" },
+    { id:3,  titulo:"Don Quijote de la Mancha",      autor:"Miguel de Cervantes",       genero:"Clásico",          anio:1605, estado:"prestado",   prestatario:"Carlos Díaz",  fechaPrestamo:"2026-06-20", cover:"https://covers.openlibrary.org/b/isbn/9788420412146-M.jpg" },
+    { id:4,  titulo:"El Principito",                 autor:"Antoine de Saint-Exupéry",  genero:"Infantil",         anio:1943, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg" },
+    { id:5,  titulo:"Breve historia del tiempo",     autor:"Stephen Hawking",           genero:"Ciencia",          anio:1988, estado:"prestado",   prestatario:"Ana Morales",  fechaPrestamo:"2026-06-15", cover:"https://covers.openlibrary.org/b/isbn/9780553380163-M.jpg" },
+    { id:6,  titulo:"La casa de los espíritus",      autor:"Isabel Allende",            genero:"Novela",           anio:1982, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780553383805-M.jpg" },
+    { id:7,  titulo:"Fahrenheit 451",                autor:"Ray Bradbury",              genero:"Ciencia Ficción",  anio:1953, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9781451673319-M.jpg" },
+    { id:8,  titulo:"Orgullo y prejuicio",           autor:"Jane Austen",               genero:"Clásico",          anio:1813, estado:"prestado",   prestatario:"María López",  fechaPrestamo:"2026-06-18", cover:"https://covers.openlibrary.org/b/isbn/9780141439518-M.jpg" },
+    { id:9,  titulo:"El código Da Vinci",            autor:"Dan Brown",                 genero:"Misterio",         anio:2003, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780307474278-M.jpg" },
+    { id:10, titulo:"Sapiens",                       autor:"Yuval Noah Harari",         genero:"Historia",         anio:2011, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg" },
+    { id:11, titulo:"Harry Potter y la piedra filosofal", autor:"J.K. Rowling",          genero:"Fantasía",         anio:1997, estado:"disponible", prestatario:"", fechaPrestamo:"", cover:"https://covers.openlibrary.org/b/isbn/9780747532699-M.jpg" },
+    { id:12, titulo:"Rayuela",                       autor:"Julio Cortázar",            genero:"Novela",           anio:1963, estado:"prestado",   prestatario:"Pedro Soto",   fechaPrestamo:"2026-06-22", cover:"https://covers.openlibrary.org/b/isbn/9788437604572-M.jpg" }
   ];
 
   const HISTORIAL_EJEMPLO = [
-    { libroId:3, libro:"Don Quijote de la Mancha", prestatario:"Carlos Díaz", fecha:"2026-06-20", estado:"activo" },
-    { libroId:5, libro:"Breve historia del tiempo", prestatario:"Ana Morales", fecha:"2026-06-15", estado:"activo" },
-    { libroId:8, libro:"Orgullo y prejuicio", prestatario:"María López", fecha:"2026-06-18", estado:"activo" },
-    { libroId:12, libro:"Rayuela", prestatario:"Pedro Soto", fecha:"2026-06-22", estado:"activo" },
-    { libroId:1, libro:"Cien años de soledad", prestatario:"Luis Fernández", fecha:"2026-06-01", devolucion:"2026-06-10", estado:"devuelto" },
-    { libroId:2, libro:"1984", prestatario:"Sofía Reyes", fecha:"2026-05-20", devolucion:"2026-06-05", estado:"devuelto" },
-    { libroId:9, libro:"El código Da Vinci", prestatario:"Tomás Herrera", fecha:"2026-05-15", devolucion:"2026-05-30", estado:"devuelto" }
+    { libroId:3,  libro:"Don Quijote de la Mancha",  prestatario:"Carlos Díaz",   fecha:"2026-06-20", estado:"activo" },
+    { libroId:5,  libro:"Breve historia del tiempo", prestatario:"Ana Morales",   fecha:"2026-06-15", estado:"activo" },
+    { libroId:8,  libro:"Orgullo y prejuicio",       prestatario:"María López",   fecha:"2026-06-18", estado:"activo" },
+    { libroId:12, libro:"Rayuela",                   prestatario:"Pedro Soto",    fecha:"2026-06-22", estado:"activo" },
+    { libroId:1,  libro:"Cien años de soledad",      prestatario:"Luis Fernández",fecha:"2026-06-01", devolucion:"2026-06-10", estado:"devuelto" },
+    { libroId:2,  libro:"1984",                      prestatario:"Sofía Reyes",   fecha:"2026-05-20", devolucion:"2026-06-05", estado:"devuelto" },
+    { libroId:9,  libro:"El código Da Vinci",        prestatario:"Tomás Herrera", fecha:"2026-05-15", devolucion:"2026-05-30", estado:"devuelto" }
   ];
 
   const USUARIOS = [
-    { nombre:"Lukas Ávila", usuario:"admin", rol:"admin", email:"admin@biblioteca.duoc.cl" },
-    { nombre:"Camila Torres", usuario:"biblio", rol:"bibliotecario", email:"c.torres@biblioteca.duoc.cl" },
-    { nombre:"Diego Muñoz", usuario:"diego.m", rol:"bibliotecario", email:"d.munoz@biblioteca.duoc.cl" },
-    { nombre:"Valentina Rojas", usuario:"val.rojas", rol:"admin", email:"v.rojas@biblioteca.duoc.cl" }
+    { nombre:"Lukas Ávila",     usuario:"admin",   rol:"admin",         email:"admin@biblioteca.duoc.cl" },
+    { nombre:"Camila Torres",   usuario:"biblio",  rol:"bibliotecario", email:"c.torres@biblioteca.duoc.cl" },
+    { nombre:"Diego Muñoz",     usuario:"usuario", rol:"usuario",       email:"d.munoz@biblioteca.duoc.cl" },
+    { nombre:"Valentina Rojas", usuario:"val.rojas",rol:"admin",        email:"v.rojas@biblioteca.duoc.cl" }
   ];
 
-  const COLORES_GENERO = [
-    'var(--coral)','var(--azul)','var(--verde)','var(--morado)',
-    'var(--naranja)','var(--amarillo)','#4ECDC4','#E056A0'
-  ];
+  const CUENTAS = {
+    admin:   { nombre:"Lukas Ávila",   rol:"admin",         rolLabel:"Administrador" },
+    biblio:  { nombre:"Camila Torres", rol:"bibliotecario", rolLabel:"Bibliotecario" },
+    usuario: { nombre:"Diego Muñoz",   rol:"usuario",       rolLabel:"Usuario" }
+  };
+
+  const COLORES_GENERO = ['var(--coral)','var(--azul)','var(--verde)','var(--morado)','var(--naranja)','var(--amarillo)','#4ECDC4','#E056A0'];
 
   /* ══════════════════════════════════════
      ESTADO
@@ -624,25 +582,73 @@
   let libros = [];
   let historial = [];
   let editandoId = null;
-  let rolActual = 'admin';
+  let rolActual = '';
 
   /* ══════════════════════════════════════
-     NAVEGACIÓN: SIDEBAR + PÁGINAS
+     LOGIN / LOGOUT
+     ══════════════════════════════════════ */
+  function login() {
+    const user = document.getElementById('loginUser').value.trim().toLowerCase();
+    const pass = document.getElementById('loginPass').value;
+    const errEl = document.getElementById('loginError');
+    const cuenta = CUENTAS[user];
+
+    if (!cuenta || pass !== '1234') {
+      errEl.style.display = 'block';
+      errEl.style.animation = 'none'; void errEl.offsetWidth; errEl.style.animation = 'shake .4s';
+      return;
+    }
+
+    errEl.style.display = 'none';
+    rolActual = cuenta.rol;
+
+    document.getElementById('topUser').textContent = cuenta.nombre;
+    const roleEl = document.getElementById('topRole');
+    roleEl.textContent = cuenta.rolLabel;
+    roleEl.className = 'topbar-role ' + cuenta.rol;
+
+    // Mostrar/ocultar botón agregar según rol
+    document.getElementById('btnAgregar').style.display =
+      (rolActual === 'admin' || rolActual === 'bibliotecario') ? '' : 'none';
+
+    cargarDatos();
+    buildNav(rolActual);
+    document.getElementById('loginScreen').classList.remove('active');
+    document.getElementById('appScreen').classList.add('active');
+    toast('Bienvenido/a, ' + cuenta.nombre);
+  }
+
+  function logout() {
+    document.getElementById('appScreen').classList.remove('active');
+    document.getElementById('loginScreen').classList.add('active');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+  }
+
+  document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+  document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+  /* ══════════════════════════════════════
+     NAVEGACIÓN
      ══════════════════════════════════════ */
   const NAV = {
     admin: [
-      { sep: "Principal" },
+      { sep:"Principal" },
       { id:"pageDashboard", ic:"📊", label:"Dashboard" },
-      { id:"pageCatalogo", ic:"📖", label:"Catálogo" },
+      { id:"pageCatalogo",  ic:"📖", label:"Catálogo" },
       { id:"pagePrestamos", ic:"📋", label:"Préstamos" },
-      { sep: "Administración" },
-      { id:"pageUsuarios", ic:"👥", label:"Usuarios" }
+      { sep:"Administración" },
+      { id:"pageUsuarios",  ic:"👥", label:"Usuarios" }
     ],
     bibliotecario: [
-      { sep: "Principal" },
+      { sep:"Principal" },
       { id:"pageDashboard", ic:"📊", label:"Dashboard" },
-      { id:"pageCatalogo", ic:"📖", label:"Catálogo" },
+      { id:"pageCatalogo",  ic:"📖", label:"Catálogo" },
       { id:"pagePrestamos", ic:"📋", label:"Préstamos" }
+    ],
+    usuario: [
+      { sep:"Biblioteca" },
+      { id:"pageCatalogo", ic:"📖", label:"Catálogo" }
     ]
   };
 
@@ -656,7 +662,7 @@
         sidebar.appendChild(s); return;
       }
       const d = document.createElement('div'); d.className = 'nav-item'; d.dataset.target = item.id;
-      d.innerHTML = `<span class="ic">${item.ic}</span>${item.label}`;
+      d.innerHTML = '<span class="ic">' + item.ic + '</span>' + item.label;
       d.onclick = () => navegar(item.id);
       sidebar.appendChild(d);
       if (!first) first = item.id;
@@ -685,44 +691,6 @@
   }
 
   /* ══════════════════════════════════════
-     LOGIN / LOGOUT
-     ══════════════════════════════════════ */
-  function login() {
-    const user = document.getElementById('loginUser').value.trim();
-    const pass = document.getElementById('loginPass').value.trim();
-    const role = document.getElementById('loginRole').value;
-    const errEl = document.getElementById('loginError');
-
-    const valid = (user === 'admin' || user === 'biblio') && pass === '1234';
-    if (!valid) {
-      errEl.style.display = 'block';
-      errEl.style.animation = 'none'; void errEl.offsetWidth; errEl.style.animation = 'shake .4s';
-      return;
-    }
-    errEl.style.display = 'none';
-    rolActual = user === 'admin' ? 'admin' : 'bibliotecario';
-
-    const nombres = { admin: 'Lukas Ávila', biblio: 'Camila Torres' };
-    const roles = { admin: 'Administrador', bibliotecario: 'Bibliotecario' };
-    document.getElementById('topUser').textContent = nombres[user] || user;
-    document.getElementById('topRole').textContent = roles[rolActual];
-
-    cargarDatos();
-    buildNav(rolActual);
-    document.getElementById('loginScreen').classList.remove('active');
-    document.getElementById('appScreen').classList.add('active');
-    toast(`Bienvenido/a, ${nombres[user]}`);
-  }
-
-  function logout() {
-    document.getElementById('appScreen').classList.remove('active');
-    document.getElementById('loginScreen').classList.add('active');
-  }
-
-  document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-  document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-
-  /* ══════════════════════════════════════
      DATOS (localStorage)
      ══════════════════════════════════════ */
   function cargarDatos() {
@@ -730,8 +698,7 @@
     const gh = localStorage.getItem('bduoc_historial');
     libros = gl ? JSON.parse(gl) : JSON.parse(JSON.stringify(LIBROS_EJEMPLO));
     historial = gh ? JSON.parse(gh) : JSON.parse(JSON.stringify(HISTORIAL_EJEMPLO));
-    if (!gl) guardarDatos();
-    if (!gh) guardarDatos();
+    if (!gl || !gh) guardarDatos();
   }
 
   function guardarDatos() {
@@ -739,11 +706,10 @@
     localStorage.setItem('bduoc_historial', JSON.stringify(historial));
   }
 
-  function siguienteId() {
-    return libros.length === 0 ? 1 : Math.max(...libros.map(l => l.id)) + 1;
-  }
-
+  function siguienteId() { return libros.length === 0 ? 1 : Math.max(...libros.map(l => l.id)) + 1; }
   function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+  function puedeEditar() { return rolActual === 'admin' || rolActual === 'bibliotecario'; }
 
   /* ══════════════════════════════════════
      DASHBOARD
@@ -753,47 +719,28 @@
     const disp = libros.filter(l => l.estado === 'disponible').length;
     const prest = libros.filter(l => l.estado === 'prestado').length;
     const generos = [...new Set(libros.map(l => l.genero))];
-
     document.getElementById('dTotal').textContent = total;
     document.getElementById('dDisp').textContent = disp;
     document.getElementById('dPrest').textContent = prest;
     document.getElementById('dGeneros').textContent = generos.length;
 
-    // Barras por género
     const conteo = {};
     libros.forEach(l => { conteo[l.genero] = (conteo[l.genero] || 0) + 1; });
     const sorted = Object.entries(conteo).sort((a, b) => b[1] - a[1]);
-    const max = sorted.length ? sorted[0][1] : 1;
-
     document.getElementById('genreCharts').innerHTML = sorted.map(([gen, cant], i) => {
       const pct = Math.round((cant / total) * 100);
       const color = COLORES_GENERO[i % COLORES_GENERO.length];
-      return `<div class="genre-bar">
-        <div class="gb-label"><span>${esc(gen)}</span><span>${cant} libro${cant > 1 ? 's' : ''} (${pct}%)</span></div>
-        <div class="gb-track"><div class="gb-fill" style="width:${pct}%;background:${color}"></div></div>
-      </div>`;
+      return '<div class="genre-bar"><div class="gb-label"><span>' + esc(gen) + '</span><span>' + cant + ' libro' + (cant > 1 ? 's' : '') + ' (' + pct + '%)</span></div><div class="gb-track"><div class="gb-fill" style="width:' + pct + '%;background:' + color + '"></div></div></div>';
     }).join('');
 
-    // Actividad reciente
     const recientes = historial.slice(0, 6);
     document.getElementById('activityList').innerHTML = recientes.length
       ? recientes.map(h => {
-          const esActivo = h.estado === 'activo';
-          const icClass = esActivo ? 'prestamo' : 'devolucion';
-          const icEmoji = esActivo ? '📤' : '↩️';
-          const texto = esActivo
-            ? `<b>${esc(h.prestatario)}</b> tomó prestado <b>${esc(h.libro)}</b>`
-            : `<b>${esc(h.prestatario)}</b> devolvió <b>${esc(h.libro)}</b>`;
-          const fecha = esActivo ? h.fecha : h.devolucion;
-          return `<div class="activity-item">
-            <div class="ai-icon ${icClass}">${icEmoji}</div>
-            <div class="ai-text">${texto}</div>
-            <div class="ai-date">${fecha}</div>
-          </div>`;
+          const act = h.estado === 'activo';
+          return '<div class="activity-item"><div class="ai-icon ' + (act ? 'prestamo' : 'devolucion') + '">' + (act ? '📤' : '↩️') + '</div><div class="ai-text"><b>' + esc(h.prestatario) + '</b> ' + (act ? 'tomó prestado' : 'devolvió') + ' <b>' + esc(h.libro) + '</b></div><div class="ai-date">' + (act ? h.fecha : h.devolucion) + '</div></div>';
         }).join('')
-      : '<p style="color:var(--texto-soft);font-size:14px;padding:20px 0;text-align:center">Sin actividad registrada</p>';
+      : '<p style="color:var(--texto-soft);font-size:14px;padding:20px 0;text-align:center">Sin actividad</p>';
 
-    // Animar barras
     setTimeout(() => {
       document.querySelectorAll('#genreCharts .gb-fill').forEach(bar => {
         const w = bar.style.width; bar.style.width = '0';
@@ -809,6 +756,7 @@
     actualizarGeneros();
     const filtrados = filtrar();
     const grid = document.getElementById('grid');
+    const editar_ = puedeEditar();
 
     if (filtrados.length === 0) {
       grid.innerHTML = '<div class="empty"><div class="emoji">📭</div><p>No se encontraron libros</p></div>';
@@ -817,24 +765,27 @@
 
     grid.innerHTML = filtrados.map(libro => {
       const esPrestado = libro.estado === 'prestado';
-      return `<div class="card">
-        <div class="card-header">
-          <div class="card-title">${esc(libro.titulo)}</div>
-          <span class="card-badge ${libro.estado}">${esPrestado ? 'Prestado' : 'Disponible'}</span>
-        </div>
-        <div class="card-info">
-          <span>✍️ ${esc(libro.autor)}</span>
-          <span>📁 ${esc(libro.genero)} · 📅 ${libro.anio}</span>
-        </div>
-        ${esPrestado ? `<div class="card-prestamo">👤 ${esc(libro.prestatario)} · desde ${libro.fechaPrestamo}</div>` : ''}
-        <div class="card-actions">
-          ${esPrestado
-            ? `<button class="btn-devolver" onclick="devolver(${libro.id})">↩ Devolver</button>`
-            : `<button class="btn-prestar" onclick="abrirPrestar(${libro.id})">📖 Prestar</button>`}
-          <button class="btn-editar" onclick="editar(${libro.id})">✏️ Editar</button>
-          <button class="btn-eliminar" onclick="eliminar(${libro.id})">🗑️ Eliminar</button>
-        </div>
-      </div>`;
+      const coverHtml = libro.cover
+        ? '<img src="' + esc(libro.cover) + '" alt="' + esc(libro.titulo) + '" onerror="this.parentElement.innerHTML=\'<div class=cover-placeholder>📖</div>\'">'
+        : '<div class="cover-placeholder">📖</div>';
+
+      let acciones = '';
+      if (editar_) {
+        acciones = esPrestado
+          ? '<button class="btn-devolver" onclick="devolver(' + libro.id + ')">↩ Devolver</button>'
+          : '<button class="btn-prestar" onclick="abrirPrestar(' + libro.id + ')">📖 Prestar</button>';
+        acciones += '<button class="btn-editar" onclick="editar(' + libro.id + ')">✏️ Editar</button>';
+        acciones += '<button class="btn-eliminar" onclick="eliminar(' + libro.id + ')">🗑️ Eliminar</button>';
+      }
+
+      return '<div class="card">' +
+        '<div class="card-cover">' + coverHtml + '</div>' +
+        '<div class="card-body">' +
+          '<div class="card-header"><div class="card-title">' + esc(libro.titulo) + '</div><span class="card-badge ' + libro.estado + '">' + (esPrestado ? 'Prestado' : 'Disponible') + '</span></div>' +
+          '<div class="card-info"><span>✍️ ' + esc(libro.autor) + '</span><span>📁 ' + esc(libro.genero) + ' · 📅 ' + libro.anio + '</span></div>' +
+          (esPrestado ? '<div class="card-prestamo">👤 ' + esc(libro.prestatario) + ' · desde ' + libro.fechaPrestamo + '</div>' : '') +
+          (acciones ? '<div class="card-actions">' + acciones + '</div>' : '') +
+        '</div></div>';
     }).join('');
   }
 
@@ -843,10 +794,9 @@
     const estado = document.getElementById('filterEstado').value;
     const genero = document.getElementById('filterGenero').value;
     return libros.filter(l => {
-      const b = l.titulo.toLowerCase().includes(busqueda) || l.autor.toLowerCase().includes(busqueda);
-      const e = estado === 'todos' || l.estado === estado;
-      const g = genero === 'todos' || l.genero === genero;
-      return b && e && g;
+      return (l.titulo.toLowerCase().includes(busqueda) || l.autor.toLowerCase().includes(busqueda))
+        && (estado === 'todos' || l.estado === estado)
+        && (genero === 'todos' || l.genero === genero);
     });
   }
 
@@ -855,7 +805,7 @@
     const generos = [...new Set(libros.map(l => l.genero).filter(Boolean))].sort();
     const val = select.value;
     select.innerHTML = '<option value="todos">Todos los géneros</option>';
-    generos.forEach(g => { select.innerHTML += `<option value="${esc(g)}">${esc(g)}</option>`; });
+    generos.forEach(g => { select.innerHTML += '<option value="' + esc(g) + '">' + esc(g) + '</option>'; });
     select.value = val;
   }
 
@@ -864,7 +814,7 @@
   document.getElementById('filterGenero').addEventListener('change', renderCatalogo);
 
   /* ══════════════════════════════════════
-     CRUD LIBROS
+     CRUD
      ══════════════════════════════════════ */
   function abrirModal(id) {
     editandoId = id || null;
@@ -882,10 +832,7 @@
     document.getElementById('mTitulo').focus();
   }
 
-  function cerrarModal() {
-    document.getElementById('modalOverlay').classList.remove('active');
-    editandoId = null;
-  }
+  function cerrarModal() { document.getElementById('modalOverlay').classList.remove('active'); editandoId = null; }
 
   function guardarLibro() {
     const titulo = document.getElementById('mTitulo').value.trim();
@@ -899,7 +846,7 @@
       l.titulo = titulo; l.autor = autor; l.genero = genero; l.anio = anio;
       toast('Libro actualizado');
     } else {
-      libros.push({ id: siguienteId(), titulo, autor, genero, anio, estado:'disponible', prestatario:'', fechaPrestamo:'' });
+      libros.push({ id: siguienteId(), titulo, autor, genero, anio, estado:'disponible', prestatario:'', fechaPrestamo:'', cover:'' });
       toast('Libro agregado al catálogo');
     }
     guardarDatos(); renderCatalogo(); cerrarModal();
@@ -909,13 +856,13 @@
 
   function eliminar(id) {
     const l = libros.find(x => x.id === id);
-    if (!confirm(`¿Eliminar "${l.titulo}"?`)) return;
+    if (!confirm('¿Eliminar "' + l.titulo + '"?')) return;
     libros = libros.filter(x => x.id !== id);
     guardarDatos(); renderCatalogo(); toast('Libro eliminado');
   }
 
   /* ══════════════════════════════════════
-     PRÉSTAMOS / DEVOLUCIONES
+     PRÉSTAMOS
      ══════════════════════════════════════ */
   function abrirPrestar(id) {
     document.getElementById('mPrestarId').value = id;
@@ -934,7 +881,7 @@
     libro.estado = 'prestado'; libro.prestatario = nombre; libro.fechaPrestamo = fecha;
     historial.unshift({ libroId: id, libro: libro.titulo, prestatario: nombre, fecha, estado: 'activo' });
     guardarDatos(); renderCatalogo(); cerrarPrestar();
-    toast(`"${libro.titulo}" prestado a ${nombre}`);
+    toast('"' + libro.titulo + '" prestado a ' + nombre);
   }
 
   function devolver(id) {
@@ -944,32 +891,27 @@
     if (reg) { reg.estado = 'devuelto'; reg.devolucion = fecha; }
     libro.estado = 'disponible'; libro.prestatario = ''; libro.fechaPrestamo = '';
     guardarDatos(); renderCatalogo();
-    toast(`"${libro.titulo}" devuelto`);
+    toast('"' + libro.titulo + '" devuelto');
   }
 
-  function devolverDesdeTabla(libroId) {
-    devolver(libroId);
-    renderPrestamos();
-  }
+  function devolverDesdeTabla(libroId) { devolver(libroId); renderPrestamos(); }
 
   /* ══════════════════════════════════════
      TABLA PRÉSTAMOS
      ══════════════════════════════════════ */
   function renderPrestamos() {
     const tbody = document.querySelector('#tablaPrestamos tbody');
+    const editar_ = puedeEditar();
     if (historial.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--texto-soft)">Sin préstamos registrados</td></tr>';
       return;
     }
     tbody.innerHTML = historial.map(h => {
-      const esActivo = h.estado === 'activo';
-      return `<tr>
-        <td><b>${esc(h.libro)}</b></td>
-        <td>${esc(h.prestatario)}</td>
-        <td>${h.fecha}</td>
-        <td><span class="pill ${esActivo ? 'activo' : 'devuelto'}">${esActivo ? 'Prestado' : 'Devuelto'}</span></td>
-        <td>${esActivo ? `<button class="btn-table" onclick="devolverDesdeTabla(${h.libroId})">↩ Devolver</button>` : `<span style="font-size:12px;color:var(--texto-light)">${h.devolucion}</span>`}</td>
-      </tr>`;
+      const act = h.estado === 'activo';
+      const accion = act && editar_
+        ? '<button class="btn-table" onclick="devolverDesdeTabla(' + h.libroId + ')">↩ Devolver</button>'
+        : (act ? '<span class="pill activo">Activo</span>' : '<span style="font-size:12px;color:var(--texto-light)">' + h.devolucion + '</span>');
+      return '<tr><td><b>' + esc(h.libro) + '</b></td><td>' + esc(h.prestatario) + '</td><td>' + h.fecha + '</td><td><span class="pill ' + (act ? 'activo' : 'devuelto') + '">' + (act ? 'Prestado' : 'Devuelto') + '</span></td><td>' + accion + '</td></tr>';
     }).join('');
   }
 
@@ -977,35 +919,22 @@
      USUARIOS
      ══════════════════════════════════════ */
   function renderUsuarios() {
+    const iconos = { admin: '👑', bibliotecario: '📚', usuario: '👤' };
     document.getElementById('userGrid').innerHTML = USUARIOS.map(u => {
-      const esAdmin = u.rol === 'admin';
-      return `<div class="user-card">
-        <div class="user-avatar ${esAdmin ? 'admin' : 'biblio'}">${esAdmin ? '👑' : '📚'}</div>
-        <div class="user-info">
-          <h4>${esc(u.nombre)}</h4>
-          <p>${esc(u.email)}</p>
-          <span class="role-tag ${esAdmin ? 'admin' : 'biblio'}">${esAdmin ? 'Administrador' : 'Bibliotecario'}</span>
-        </div>
-      </div>`;
+      return '<div class="user-card"><div class="user-avatar ' + u.rol + '">' + (iconos[u.rol] || '👤') + '</div><div class="user-info"><h4>' + esc(u.nombre) + '</h4><p>' + esc(u.email) + '</p><span class="role-tag ' + u.rol + '">' + esc(u.rol.charAt(0).toUpperCase() + u.rol.slice(1)) + '</span></div></div>';
     }).join('');
   }
 
   /* ══════════════════════════════════════
      UTILIDADES
      ══════════════════════════════════════ */
-  function cerrarModalFondo(e) {
-    if (e.target === e.currentTarget) { cerrarModal(); cerrarPrestar(); }
-  }
-
+  function cerrarModalFondo(e) { if (e.target === e.currentTarget) { cerrarModal(); cerrarPrestar(); } }
   let tt;
   function toast(msg) {
     const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
     clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2500);
   }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { cerrarModal(); cerrarPrestar(); }
-  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarModal(); cerrarPrestar(); } });
 </script>
 </body>
 </html>
